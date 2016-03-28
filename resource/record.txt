@@ -1,0 +1,898 @@
+附件是数据交换平台接口文档更新版本，请查收并留意以下说明：
+1.接口地址更新为http://192.168.1.101:8800/mcenter/services/；
+2.作业的日志接口和缩略图接口有内容转码，解码操作请参照附件样例的相关函数；
+预计将在本周四
+
+KNOB_TASKSTATETRANS TaskStateTrans/PersistenceTool任务操作时
+KNOB_TASK_QUEUE TaskCoordinator任务队列操作
+KNOB_TASK_MAP RunningTaskManager运行中的任务map
+KNOB_TASK  Task/PersistenceTool
+
+KNOB_SCHEDJOB  SchedJob作业调度
+KNOB_SCHED_JOB_MAP JobCoordinator作业操作协调
+KNOB_JOBSTATETRANS  PersistenceTool作业操作
+KNOB_JOB_QUEUE  JobExecutor
+KNOB_JOB_MAP  RunningJobManager运行中的作业map
+KNOB_JOB  Job
+JobCoordinator.java 添加取消作业等操作，并定义作业执行的内容（将作业放入执行器的队列）
+JobScheduler.java 调度作业，维护调度器及作业列表，并定义作业到时如何执行
+JobExecutor.java 包含要执行队列的执行器，并定义执行器如何处理作业（放入任务处理器）
+TaskCoordinator.java 包含任务队列的任务处理器 分派任务队列中的任务给worker(为什么要用死循环，不用监听器)
+WorkerStateCache.java 维护worker列表，rpc调用分派任务给worker
+RunningJobManager.java 运行中的作业管理器
+RunningTaskManager.java 运行中的任务管理器
+
+28 12:00-20:00+8 写培训材料
+27 9:00-12:00+3 解决现场问题
+
+27 18:30+1
+26 18:30+1
+
+软件的进程运行于32位系统上，其寻址位也是32位，能表示的空间是232=4G，范围从0x0000 0000~0xFFFF FFFF。
+http://192.168.18.23:8800/basic/mcenter/jobPage/job.jsp?AuthorizedUserID=manager
+http://192.168.18.30:8809/Spoon/Spoon.html
+http://192.168.18.42:7010/basic/
+http://192.168.14.83:7180/
+http://portal.hnisi.com.cn/portal/main.jsp
+http://gs-wiki.hnisi.com.cn/pages/viewpage.action?pageId=119934567
+http://www.cnblogs.com/kaituorensheng/p/3814925.html
+http://www.12306.cn/mormhweb/
+http://blog.csdn.net/mapdigit/article/details/21878083" ADD_DATE="18725822953">Scala开发入门教程
+http://blog.csdn.net/wangfupeng1988/article/details/46418203" ADD_DATE="18725822953">【前端福利】用grunt搭建自动化的web前端开发环境
+http://www.thebigdata.cn/Hadoop/28731.html" ADD_DATE="25714937334">Hadoop Yarn内存资源隔离实现原理
+http://blog.csdn.net/miyatang/article/details/7895059" ADD_DATE="18725822953">Linux Shell常用技巧
+http://www.tuicool.com/articles/ENjmeaY" ADD_DATE="25714937334">离线安装Cloudera Manager 5和CDH5
+http://blog.chaitin.com/" ADD_DATE="40862668512">Chaitin Blog</A>
+http://www.cnblogs.com/huhu0013/p/3314254.html" ADD_DATE="25714937334">[Windows驱动开发]（一）序言 - huhu0013 - 博客园</A>
+http://www.52pojie.cn/thread-195111-1-1.html" ADD_DATE="25714937334">【S01E01】Shark恒 破解教程之图文！【爆破的原理】 - 『脱壳破解区』 - 吾爱破解论坛 - LCG - LSG |安卓破解|病毒分析|破解软件|www.52pojie.cn</A>
+http://blog.163.com/hlz_2599/blog/static/142378474201341210104368/" ADD_DATE="18714834709">OllyDBG完美教程(超强入门级) - 网易博客</A>
+http://blog.jobbole.com/79267/" ADD_DATE="40862668512">浅谈算法和数据结构（1）：栈和队列 - 博客 - 伯乐在线</A>
+http://wclg.baijia.baidu.com/article/320518" ADD_DATE="25714937334">2016年瞄准盈利，特斯拉投入15亿美元觊觎的四大阴谋--百度百家</A>
+
+
+select * from 表 as of timestamp sysdate-(1/(24)); --恢复1小时前的表中的数据  ;
+ker63bzvv65
+公安表输入&#x516c;&#x5b89;&#x8868;&#x8f93;&#x5165;  公安插入 / 更新&#x516c;&#x5b89;&#x63d2;&#x5165; &#x2f; &#x66f4;&#x65b0;
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://gcjs-hadoop01.com.cn:8020</value>
+  </property>
+http://gcjs-hadoop01:7180/
+http://192.168.18.42:7010/basic/
+192.168.14.83 gcjs-hadoop01.com.cn gcjs-hadoop01
+192.168.14.84 gcjs-hadoop02.com.cn gcjs-hadoop02
+192.168.14.85 gcjs-hadoop03.com.cn gcjs-hadoop03
+192.168.14.86 gcjs-hadoop04.com.cn gcjs-hadoop04
+192.168.14.87 gcjs-hadoop05.com.cn gcjs-hadoop05
+192.168.14.88 gcjs-hadoop06.com.cn gcjs-hadoop06
+192.168.14.90  .\administrator Zxcv4321
+root/Ggjs@123
+
+青云winserver2012服务器的地址：121.201.29.198 用户名：Administrator 密码：zxcV1234
+10.160.3.111 administrator/hn@123
+192.168.18.30 root/85574999
+192.168.18.23 root/85574999
+192.168.14.4 1521 zxjck pcs_kj_yfzx/pcs_kj_yfzx pcs_kettle_yfzx/pcs_kettle_yfzx
+192.168.14.82 1521 ggjs DEV_01/A  ggjs_kettle/A KETTLE5/A
+whs 123456/111111
+10.160.25.193 Huawei@123
+
+SELECT RJA.ID_JOB, RT.ID_TRANSFORMATION,RT.NAME FROM R_TRANSFORMATION RT,R_JOBENTRY_ATTRIBUTE RJA 
+WHERE to_char(substr(RJA.VALUE_STR,1,4000))=RT.ID_TRANSFORMATION 
+AND RJA.CODE='trans_object_id' AND RJA.ID_JOB IN (34,34,35,36)
+
+java -jar trang.jar a.xml a.xsd  
+$ xjc a.xsd
+tail -f /var/log/cron
+echo "57 23 * * * sh /home/data/tomcat8-mcenter/cronlog.sh" >> /var/spool/cron/root    ;每天执行一次
+service crond reload;
+echo "0 1 * * * /usr/sbin/ntpdate 10.160.120.58 >> /var/log/ntpdate.txt" >> /var/spool/cron/root
+service crond reload;
+0 1 * * * /usr/sbin/ntpdate 10.160.120.58 >> /var/log/ntpdate.txt
+vmware vsphere:
+troubleshooting options; esxi shell,ssh; Alt+F1
+vi /etc/vmware/init/init.d/00.vmnix
+RequiredMemory=2064384
+vi /etc/vmware/esx.conf
+/vmkernel/minMemoryCheck = "false"
+
+VMware ESX
+创建：自定义安装;rhel 64系统;Disk,Creat a new virtual disk(30G);网络桥连,并勾选"replicate...";Processors的Preferred Mode选择"Intel-VTx or AMD-V"
+在镜像放置路径下，记事本打开ESX3.5U3.vmx，在monitor.virtual_exec = hardware"行后加上"monitor_control.restrict_backdoor = "true"
+
+eclipse: validation, error, spell, jdk, jad, server
+F3: 打开申明(Open declaration)    f4:打开类型层次结构
+Shift+enter在当前行之下创建一个空白行。Ctrl+shift+enter则在当前行之前插入空白行。
+
+Alt+方向键 将当前行的内容往上或下移动
+Alt+？ 可用变量   alt+shift+?  可用方法
+Alt-left arrow: 在导航历史记录(Navigation History)中后退; Alt-right arrow
+alt+shift+r 集体重命名
+alt+shift+l以及alt+shift+m：提取本地变量及方法
+alt+shift+j：为当前方法添加注释体
+Alt+Shift+ up/down 关联元素选择增加、减少
+Alt+Shift+O(或点击工具栏Toggle Mark Occurrences钢笔按钮) 同名参数高亮
+Alt+Shift+C 修改函数结构(比较实用,有N个函数调用了这个方法,修改一次搞定) 
+Alt+Shift+F 把Class中的local变量变为field变量 (比较实用的功能) 
+Alt+Shift+I 合并变量(可能这样说有点不妥Inline)Alt+Shift+V 移动函数和变量(不怎么常用)Alt+Shift+Z 重构的后悔药(Undo)
+
+Ctrl+T 查看一个类的继承关系树，是自顶向下的，再多按一次Ctrl+T, 会换成自底向上的显示结构
+Ctrl-Q: 回到最后一次编辑的地方。
+ctrl+o：快速outline  
+Ctrl+m 是编辑器窗口最大化
+ctrl+.及ctrl+1：下一个错误及快速修改
+ctrl+.将光标移动至当前文件中的下一个报错处或警告处。一般与ctrl+1一并使用，即修改建议的快捷键
+ctrl+e：快速转换编辑器
+Ctrl-Shift-T: 打开类; ctrl+shift+r：打开资源
+Ctrl-Shift-G: 在workspace中搜索引用(reference)
+Ctrl-Shift-F: CodeàJavaàPreferencesà根据代码风格设定重新格式化代码
+Ctrl+Shift+K 查找上一个  Ctrl+K 查找下一个 
+Ctrl+Shift+W/ctrl+f6/Ctrl+PgUp 切换编辑器
+Ctrl+Shift+F7 上一个视图
+Ctrl+Shift+M(先把光标放在需导入包的类名上) 作用是加Import语句
+Ctrl+Shift+O作用是缺少的Import语句被加入，多余的Import语句被删除。
+Ctrl+Shift+P代码段前后切换
+
+ping -n 1 -r 1 www.baidu.com
+diaosx.com    备案号：陕ICP备12002594号-1
+https://www.networksolutions.com/manage-it/index.jsp
+账号 xiaoyuer520bg6ycc
+密码 awu123789
+www.diaosx.com 
+
+易语言教程全套视频教程最快从零开始到高手E语言辅助脚本制作
+http://pan.baidu.com/s/1sjIxbHF 提取密码: 2jmz 
+易语言解压密码: feiershipin.taobao.com   
+播放密码:bbs.176ku.com免费看
+
+易语言视频教程赠品郁金香驱动教程
+上半部链接: http://pan.baidu.com/s/1c0zSLJq 密码: do98
+下半部链接: http://pan.baidu.com/s/1pJwO54n 密码: ck58
+解压密码: dty566_77&aaaff
+
+易语言视频教程赠品更多易语言视频教程
+易语言赠品 链接: http://pan.baidu.com/s/1mg4w4Og 密码: 8ts0
+易语言解压密码: feiershipin.taobao.com   
+播放密码:bbs.176ku.com免费看
+
+郁金香Delphi下载链接
+链接: http://pan.baidu.com/s/1hqrFGI4 密码: rdjx
+解压密码: fcvlzfz+%fzzf6333FCVF
+
+C语言/C++/vc++视频教程 从入门到精通 编程讲解
+http://pan.baidu.com/s/1i3GDrhz
+链接:http://pan.baidu.com/s/1c0GIWjI 提取密码:g9aq
+
+按键精灵9紫猫.江中游.EZ脚本学院九尾狐按键精灵
+EZ脚本学院教程链接: http://pan.baidu.com/s/1hqAAZmW 密码: pfd2
+江中游按键精灵全部VIP教程 链接: http://pan.baidu.com/s/1kzdSy 密码: 1ixb
+紫猫按键精灵培训班VIP视频教程十套链接: http://pan.baidu.com/s/1tm4wA 密码: dv62
+紫猫视频教程解压密码:  gin9.taobao.com@10
+江中游视频教程解压密码:  gin9.taobao.com@VIP11
+EZ脚本学院解压密码: xiaozhu521.
+
+按键视频教程赠品下载链接内含教程及工具包: http://yunpan.cn/QaGvKr6IGvZ5e  提取码 fcf5
+新增源码: http://yunpan.cn/cgJUbcUC56UY2  提取码 3cbe
+逍遥按键，按键精灵初级到高级进阶视频教程解压密码: amaoni
+TC赠品 链接: http://pan.baidu.com/s/1ntlYJ5B 密码: 37wb
+解压密码: feiershipin.taobao.com   
+播放密码: bbs.176ku.com免费看
+
+按键视频教程赠品下载链接内含教程及工具包: http://yunpan.cn/QaGvKr6IGvZ5e  提取码 fcf5
+紫猫按键精灵培训班VIP视频教程十套链接: http://pan.baidu.com/s/1tm4wA 密码: dv62
+
+storm:xinxue205/182577689917692921165551685369422791528701366300645222439813647048455575470264242144906177011708838353571983301751895792960617226588602740466343268708296031337533108234330504130150920710004005111717923115815222002924424815105110523002104704800718415023523517509713324915305210614410004005411418514423015616201724624822805110423309604105200720614423423416809624113314405402422403721800520317020522318441899
+b47aa-54350/488c993fd53e6c903524344969601e4c39aeedbd2e9d497c9c2cc3039aa3f9859f92f3a2d8b7abfeb21ebe7222bec6ec13eb50903762de67290dbadb9938273408c1cf40d6281b2ee2992ed16b3adf93
+
+服务器IP：98.126.208.92  xinxue/xinxue205
+程序传到WEB目录，不要删除WEB文件夹！
+空间账号，密码，就是FTP的账号，密码。
+地址写IP，端口 21 然后连接就可以管理FTP！
+
+telecomadmin/nE7jA%5m  PSK(); PING(); MAC();
+jxf13556167870	65969847	e0:30:05:8d:4f:a0  ChinaNet_angeljone
+4878531011  		45376221  20:DC:E6:6D:47:EE  6d404
+13316121662			57346960	F4:PEC:38:3B:0A:36 TP-LINK_3B0A36
+00112345				26179803	EC:17...					 wuxian456
+19840725				79419444	1C:FA...					 TP-LINK_123
+pxch1983				42407195	38:83:45:49:E3:AE  TP-LINK_pcht
+58605444        86574730  8C 21 0A F5 55 D8  905
+
+
+wifi热点
+netsh wlan set hostednetwork mode=allow ssid=atmvh key=atmvh1234
+设置网络共享，报错则检查FIREWALL服务是否启动
+netsh wlan start hostednetwork
+
+天河区盈溪路彩怡街12号401房(汇彩轩8座)
+广州市天河区天河软件园科韵路园区建工路10号建功楼 开发七部
+export LANG="zh_CN.GBK" export LANGUAGE="zh_CN.GBK" export LC_ALL="zh_CN.GBK" export LC_CTYPE="zh_CN.GBK"
+INFORMIX重启：onmode -ky停止(停止无反应时执行onmode -sy切换到静态模式，还有用-ny取消共享内存)，切换到informix用户--换到目录./informix11下，执行环境设置脚本. ./setenv.atmph--执行oninit -vy命令
+
+服务优化，性能优化，自动登陆 (删除服务：sc delete 服务名称)
+WINDOWS下获取端口及程序占用信息：netstat -ano ;  tastlist /fi "PID eq 6001"
+首选DNS：202.96.128.166; 备用DNS：202.96.128.86
+HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Momory Management:  DWord
+LargeSystemCache:1; SecondLevelDataCache:512; IOPageLockLimit:8000; 
+HKEY_LOCAL_MACHINE--SYSTEM--ControlSet001--Control--GraphicsDrivers--Configuration  找到scaling，值从4改为3
+HKEY_CURRENT_USER\Software\Blizzard Entertainment\Warcraft III\Video 高和宽(reswidth和resheight)，十进制 
+@echo 启动RTX
+@pause
+@start "RTX" "C:\Program Files (x86)\Tencent\RTXC\RTX.exe"
+control userpasswords2
+Java	class_path	java_home	Path
+1.7 .;D:\jdk1.7_x64\lib\dt.jar;D:\jdk1.7_x64\lib\tools.jar      D:\jdk1.7_x64   D:\jdk1.7_x64\bin;D:\jdk1.7_x64\jre\bin
+ORACLE_HOME = D:\program\oracle-instant-client-11-2
+TNS_ADMIN = D:\program\oracle-instant-client-11-2
+NLS_LANG = SIMPLIFIED CHINESE_CHINA.ZHS16GBK
+
+
+EditPlus :GNU/918A8-20DD8-44ZA1-B0W4A-13T66
+Toad: 0-38881-64455-63241-20343
+VMware8:UV3NK-25Y41-081CZ-0YP7C-PQ89A
+VMware7:UF1W2-DCXDK-48ENY-TDNGG-MG0V2; VA34H-DWWD6-08ELZ-3XQ7X-PAK90;
+VMware10:JZ6WK-4529P-HZAA1-9RAG6-33JNR, 5F4EV-4Z0DP-XZHN9-0L95H-02V17
+SecureCRT:名字(Windows);公司(IC);序列号(03-50-004401);许可密钥(ADF5M3 UV2M99 J9A9BV KDWJDC ACJ88T 5GH1FB 6879RF HNFYFQ);发布日期(16-02-2006)
+Enterprise Architect 8:{67SC0O95-SZPS-LIG2-YQ8Q-8D2N-KWTD-0W6R-TWDD-KT6RB-1J}
+UltraEdit:Team Z.W.T/NPCOM-OLUH3-HKIOH-LMSJI-IKDMH-JIPRM-NMNLK-KQLNO  cmd里进入安装目录后执行regsvr32.exe wodFtpDLX.dll
+Beyond Compare: mv1nPlXAywBDCdhxFc9QOVv6TBcQHLAXBQUAKTh3ie4fqSEOnWrPsnVkFyt0wAkJHweoExRJWWVwwCniKNROSdJzJXE6YVapYW7f+tRRXRFI4yn4NjjZ0RiiqGRCTVzwComUcXB-eiFWRBY6JpSsCNkmIxL5KsRCo442djHhTZE
+
+知识(总结)
+1.JSP的类没找到异常：重启服务器后解决；
+2.控制台NoClassDefFoundError异常：
+ java.lang.NoClassDefFoundError: javax/servlet/jsp/jstl/core/LoopTag
+ 原因：tomcat/common下缺少jstl.jar包，加入后问题解决
+3.查询操作时，报索引超出范围，检查查询输出的参数串，发现参数数量超数，改正后问题解决。
+4.分页查询页面换页(下一页或选页)功能无效，查询的单页记录数与设置的值不一致；为BIZ中缺少turnpage三个参数所造成，添加后解决；
+5.JSP的处理机制是优先处理JAVA的scriptlet，再javascript，再html；对scriptlet和javascript都是先编译后执行原则。相对于JAVA的scriptlet语句，javascript有自身一些特点：不存在方法的重载。同名的方法只存在一个，不理会参数的数量(调用时如果参数数量少，则按从左至右对应，缺少的参数按空执行)；如果有2个同名的方法，则后一方法覆盖前一方法(编译时，后方法就把前方法覆盖了)。
+If的条件可以不是逻辑变量，如果条件是int类型则0值判断为逻辑假，其它值判断为逻辑真；如果是STRING类型，则空串为逻辑假，其它为逻辑真；其它类型则空值(不写或null)为逻辑假，其它为逻辑真；
+6.同目录直接写(不用/);项目根目录则“/”；
+7.jar包位置：常用的，项目可公用的包可直接放tomcat的share/lib下供同服务不同项目公用；项目特别使用的包则应放在项目的WEB-INF/lib下；
+	同时需要注意程序上线时进行包同步；
+8.tomcat/jmv setting/classpath中配置的路径下的类会在TOMCAT启动前执行，如果配置错误，会造成TOMCAT不能启动，点击TOMCAT按钮毫无反应；
+9.自定义步骤的类名应该以ACTION结束，并且方法中有EXCUTE方法；
+10.请求的头部：每次请求都有头部信息，内容包含请求端的基本信息；最末的内容为SESSIONID;
+	Cookie：首次成功访问即时生成，默认只加入SESSIONID内容；默认关闭session后自动清空，可设置时效，时效内关闭SESSION内容仍保留；
+	SESSION：需要配置才有内容，SESSION关闭自动清空内容；
+11.FORM表单提交默认方式为GET，会出现中文乱码问题；
+14.数据库连接Connection，preparedStatement和resultSet对象在使用后均要进行清理，避免数据篡改；resultSet应各个SQL单独使用；
+15.注解优化：方法/函数，参数，条件分支；
+16.网络通信数据结构：
+	1)以太网协议：MAC(目标，源)；上层通信协议(一般为IP);
+	2)IP协议：协议版本，本协议长度(头部，总长)；IP地址(目标，源)；上层协议(一般TCP);
+	3)TCP协议：通信端口(目标，源)；标示(ACK/SYN/PUSH等)；头部长度；
+	4)数据包：请求的头部，内容，报文等；
+17.头部内容：
+METHOD(请求方式)：get、post；路径：页面URL;协议：页面URL; 接收格式：XML等；referer：来源；accept-lan：接收语言；user-agent：客户端机器信息；content_type：请求内容的格式；accept_encoding：接收的编码方式；HOST:主机地址和端口；content_length：内容长度；connection：连接状态；cache_control：缓存控制；cookie
+JAVA的报文发送类HttpClient进行发送时，需指定报文的头部信息。报文内容在和头部独立出来的数据包中发送。
+18.文件上传的FORM中应配置编码方式enctype="multipart/form-data"；
+19.MD5报文摘要算法(散列算法)：将报文进行摘要MD5计算后把所得MD5值与报文一起发送至目标端；目标端把接收的报文和MD5进行校验，一致性来保证报文、文件没有被篡改；
+20.安全控件实现方式：1)对输入的密码进行转密计算；2)替代常规输入框，避免被跟踪；3)直连键盘读取数据；4)确保内存中无特殊应用程序运行；
+21.KEY盾原理：把KEY盾保存的字串在服务器注册保存，使用时把密码经KEY盾加密后发给服务器；服务器把接收的加密字串用注册的字串进行组合计算解密后验证客户端身份；
+22.动态口令：1)同步：时间同步、事件同步；2)异步：挑战应答
+23.双向认证：服务器，客户端；
+24.dataDict.xml, actionProfile.xml,serverflow.xml为配置文件，提交清单时，需手工同步代码，和打版人员确认；
+25.项目管理：关注：项目进度，质量(平衡)；
+	资源：人员，时间，技术；
+	能力：沟通能力，系统分析，综合管理、计划；
+三大发展：技术，业务，管理
+三个方面：数据库、结构；业务逻辑；页面展示
+26.return语句：在方法中只要遇到return语句，方法就会终止执行，后面语句不再执行；所以应注意return语句前执行资源释放；
+27.文件下载功能，如有临时文件生成(打包操作等)，在方法中应有清理操作；上传功能则应注意临时文件清理；
+28.AJAX报错问题：注意文件COPY后的编译问题。
+29.图片，内容不显示或有误，注意项目路径的问题(DEMO项目)；
+30.页面展示scriptlet和javaScript的应用方式：
+	1)scriptlet：返回结果为单个值，最好采用页面转换间完成查询，页面直接取值进行显示；
+	2)javaScript：返回结果为数字或集合(ICOLL、list等)应采用页面间传递参数，页面onload中通过异步请求获取和展示页面。
+31.注意XML文件的格式问题，格式有误，会造成所有可视组件出错(MVC,BIZ不能打开)；
+32.请求某个ACTION后，页面卡死，右键查看源码发现内容为ICOLL，原因为AJAX返回页面配错。修改后解决；
+33.tomcat的CATALINA文件夹中一个XML文件只可配置一个CONTEXT，用于配置有数据访问的开发工程；如只是配置简单的测试或DEMO工程，则应在serve.XML中配置(无数据访问的静态工程)；
+34.TaskMan工程的Thread.xml中配置各个任务清单；biz、flow负责任务控制任务的执行过程；controler类负责任务的执行管理(日期，时间，状态等)；
+
+XML数据记录文件
+DTD文件类型定义
+SCHEMA 基于DTD发展出来的，解决DTD非XML语法规则，不支持多类型数据，扩展差等问题
+
+Eclipse
+Android：需要1.6或以上的jdk，JAVAW随eclipse启动；
+-Xms512m
+-Xmx512m
+-XX:PermSize=128m
+-XX:MaxPermSize=128m
+-Xmn168m
+取消单词拼写验证:General->Editor->Text Editors->Spelling
+启动的加载项目:General-> Startup and Shutdown
+自动验证:Window->Preferences->Validation
+
+Tomcat:
+Web.xml: listing; servlet--servlet mapping;
+Server.xml: 设定目录context(不推荐)，Connector/port
+Catalina文件夹: 添加项目，设定目录context(推荐，目录名和XML文件名需一致)
+-Xms256m
+-Xmx512m
+
+安装db2
+#!/bin/sh
+groupadd -g 999 db2iadm1
+groupadd -g 998 db2fadm1
+groupadd -g 997 db2das1
+mkdir /db2home
+useradd -u 999 -g db2iadm1 -m -d /db2home/db2inst1 db2inst1
+useradd -u 998 -g db2fadm1 -m -d /db2home/db2fenc1 db2fenc1
+useradd -u 997 -g db2das1 -m -d /db2home/db2das1 db2das1
+passwd db2inst1
+passwd db2fenc1
+passwd db2das1
+mkdir /opt/db2inst1
+chown db2inst1 /opt/db2inst1
+chgrp db2iadm1 /opt/db2inst1
+
+----参考start
+/opt/ibm/db2/V9.1/instance/dascrt/dasauto -on  --激活DAS自动启动：
+/opt/ibm/db2/V10.5/adm/db2licm -a /tmp/seagull/db2v10/license/db2ese_c.lic
+/opt/ibm/db2/V10.5/instance/dascrt -u db2das1  --创建DAS:DB2 Administration Server
+/opt/ibm/db2/V9.1/instance/dascrt/dasauto -on  --激活DAS自动启动：
+/opt/IBM/db2/V8.1/cfg/db2ln
+/opt/ibm/db2/V10.5/instance/db2icrt -a server -u db2fenc1 db2inst1
+db2set DB2_STRIPED_CONTAINERS=on
+
+确保客户端DB2COMM设置为tcpip
+先查看db2comm设置：db2set –all
+如果没有设置这个注册表，执行db2set db2comm=tcpip
+将SVCENAME设置成/etc/services中的端口号或者服务名了吗？
+执行db2 get dbm cfg查看，找到SVCENAME，如果当前值不是服务器端的端口号或者服务名，进行更新设置
+执行：db2 update dbm cfg SVCENAME db2inst1
+注：db2inst1为服务名，这个在/etc/services文件中db2inst1 50000/tcp一致
+----参考end
+
+cp v10.5_linuxia32_expc.tar.gz /opt/
+tar –zvxf v10.5_linuxia32_expc.tar.gz
+/opt/expc/db2/db2_install
+/opt/ibm/db2/V10.5/adm/db2licm -a /opt/expc/db2/license/db2expc_uw.lic
+/opt/ibm/db2/V10.5/instance/db2icrt -p 50000 -u db2fenc1 db2inst1
+vi /etc/services   加db2inst1  50000/tcp
+yum install libaio
+
+su db2das1	
+db2admin start	--启动DAS:
+
+su - db2inst1
+db2start
+db2iauto -on db2inst
+db2 UPDATE DBM CFG USING SVCENAME db2inst1
+db2set DB2CODEPAGE=1386
+db2set DB2_PARALLEL_IO=*
+db2sampl
+--等待执行完成
+
+db2
+connect to sample
+select * from staff where dept = 20
+list tables	
+describe table sysibm.systables
+connect reset
+create database db2inst1 automatic storage yes on '/opt' dbpath on '/opt' using codeset utf-8 territory cn collate using system PAGESIZE 8192
+--等待执行完成
+quit
+
+
+--删除原默认SCHEMA
+DROP SCHEMA "QUEST_SCHEMA_PLACE_HOLDER" RESTRICT
+--新建新SCHEMA
+CREATE SCHEMA db2inst1 AUTHORIZATION DB2INST1
+COMMENT ON SCHEMA db2inst1IS db2inst1
+COMMIT
+--缓冲池
+CREATE BUFFERPOOL B_P_32K DEFERRED ALL DBPARTITIONNUMS SIZE 65536 NUMBLOCKPAGES 0 PAGESIZE 32K; 
+COMMIT;
+RESTART DATABASE DB2INST1;
+--表空间
+SET SCHEMA = DB2INST1;
+CREATE LARGE TABLESPACE CSTRANSTS IN DATABASE PARTITION GROUP "IBMDEFAULTGROUP" PAGESIZE 32K 
+MANAGED BY DATABASE  USING ( File'CSTRANSTS' 200M ) EXTENTSIZE 32 PREFETCHSIZE 32 
+BUFFERPOOL B_P_32K OVERHEAD 7.5 TRANSFERRATE 0.06 AUTORESIZE NO NO FILE SYSTEM CACHING;
+COMMIT;
+--索引空间
+CREATE LARGE TABLESPACE CSINDTS IN DATABASE PARTITION GROUP "IBMDEFAULTGROUP" PAGESIZE 32K 
+MANAGED BY DATABASE  USING ( File 'CSINDTS' 80M ) EXTENTSIZE 32 PREFETCHSIZE 32 
+BUFFERPOOL B_P_32K OVERHEAD 7.5 TRANSFERRATE 0.06 AUTORESIZE NO NO FILE SYSTEM CACHING;
+COMMIT;
+
+date -s 08/22/2013
+date -s 09:53:30
+hwclock -w
+
+db2 list applications for db sample show detail
+db2 update monitor switches using lock on
+db2 get snapshot for locks on sample
+db2 "force application(XXXXX)"   (xxxxx为snapshot中的Application handle值)
+db2 get snapshot for locks for application agentid xxxxx
+数据库快照：GET SNAPSHOT FOR DATABASE ON <dbname>
+锁快照：GET SNAPSHOT FOR LOCKS ON <dbname>
+动态SQL语句快照：GET SNAPSHOT FOR DYNAMIC SQL ON <dbname>
+缓冲池快照：GET SNAPSHOT FOR BUFFERPOOLS ON <dbname>
+表空间快照：GET SNAPSHOT FOR TABLESPACES ON <dbname>
+
+db2 connect to EBANKCS user csuser using csuser2013
+db2 update monitor switches using lock on
+db2 get snapshot for locks on EBANKCS
+批量导出：db2look -d EBANKCS -dp -e -a -l -o /tmp/sql
+批量导入：db2 -tvf /tmp/abc.sql -z /tmp/sqlimp.log  (TOAD中操作要先断开重连后执行)
+获取新SEQENCE:select nextval for CB_MESSAGE_NO from sysibm.sysdummy1
+
+DB2数据库Toad批量操作：CL_PUBLICIZEFILESUPLOAD.txt保存在Toad安装路径的bin文件夹下
+import from CL_PUBLICIZEFILESUPLOAD.txt of DEL insert into CL_PUBLICIZEFILESUPLOAD
+export to CL_PUBLICIZEFILESUPLOAD.txt of DEL select * from CL_PUBLICIZEFILESUPLOAD with ur
+
+bind安装(1-10步)
+安装bind
+1.	vi random 后随意写入内容(?砍?后保存
+2.	rndc-confgen -r random > /etc/rndc.conf
+3.	mkdir /var/named		//默认的数据库目录
+4.	vi /etc/named.conf	写入以下内容并保存
+options {
+	directory "/var/named";   //表示默认的数据库文件在/var/named中 若没有需手动创建
+	// pid-file  "/var/run/named/named.pid"; //运行的PID文件路径,用于使用其他用户启动named
+};
+zone "." {            //创建root域
+	type hint;
+	file "named.ca";
+};
+zone "localhost" {   //创建 localhost域
+	type master;
+	file "named.local"; 
+};
+zone "example.com" {  //创建 example.com域
+	type master;
+	file "example.com.zone";
+};
+zone "0.0.127.in-addr.arpa"{ //localhost的反解析 
+	type master;
+	file "127.0.0.zone";
+};
+zone "100.168.192.in-addr.arpa" {  //example.com的反向解析
+	type master;
+	file "192.168.100.zone";
+};
+key "rndc-key" {
+	algorithm hmac-md5;
+	secret "HWM3L+e7LWDZJJ/dJEzQEw=="; //secret后的密文从rndc.conf中复制过来
+};
+controls {
+	inet 127.0.0.1 port 953
+	allow { 127.0.0.1; } keys { "rndc-key"; };
+};
+# End of named.conf
+
+5.dig -t NS . >/var/named/named.ca  //向跟服务器发起查询并重定向到目标文件  
+6.vi /var/named/named.local   写入以下内容并保存
+$TTL 1D
+@   IN    SOA    localhost.  root (
+                 2007042801
+                 1H
+                 15M
+                 1W
+                 1D )
+    IN   NS   @
+    IN   A    127.0.0.1
+
+7.vi /var/named/example.com.zone  写入以下内容并保存
+$TTL 1D
+@    IN    SOA     example.com.      root (
+                 2007042801
+                 1H
+                 15M
+                 1W
+                 1D )
+              IN   NS      ns.example.com.
+              IN   MX  10  mail.example.com.
+              IN   A       192.168.100.125
+www           IN   A       192.168.100.125
+db            IN   A       192.168.100.124
+ns            IN   A       192.168.100.126
+mail          IN   A       192.168.100.251
+shop          IN   A       192.168.100.125
+*.shop        IN   A       192.168.100.124
+news          IN   CNAME   www
+
+8.vi /var/named/127.0.0.zone  写入以下内容并保存
+$TTl 1D
+@   IN     SOA   @     root.localhost. (
+                       2007042801
+                       1H
+                       15M
+                       1W
+                       1D
+                            )
+        IN NS              localhost.
+1       IN PTR             localhost.
+
+9.vi /var/named/192.168.100.zone  写入以下内容并保存
+$TTL 1D
+@            IN    SOA           @            root.example.com.  (
+                                 2007042801
+                                 1H
+                                 15M
+                                 1W
+                                 1D  )
+            IN     NS            example.com.
+125         IN     PTR           example.com.
+125         IN     PTR           www.example.com.
+124         IN     PTR           db.example.com.
+126         IN     PTR           ns.example.com.
+251         IN     PTR           mail.example.com.
+
+10.补充：
+named -u named  //以named用户启动,必须有这个用户而且,named.pid的属主是 named
+rndc reload  //配置修改后重启
+dig db.example.com  //测试服务是否正常
+
+33-51-1.7； 32-50-JDK1.6；31-49-jdk1.5；30-48-JDK1.4
+
+maven
+http://mvnrepository.com/
+http://search.maven.org/
+http://repository.sonatype.org/content/groups/public/
+http://people.apache.org/repo/m2-snapshot-repository/
+http://people.apache.org/repo/m2-incubating-repository/
+mvn install:install-file -Dfile=D:\ -DgroupId= -DartifactId= -Dversion= -Dpackaging=jar
+
+eclipse插件安装，slf4j-http://www.fuin.org/p2-repository/,  m2e-http://download.eclipse.org/technology/m2e/milestones/1.4
+Window-》Preferences-》Maven 的 installations指向maven目录， user settings指向setting.xml
+1. 创建Maven的普通java项目： 
+   mvn archetype:create -DgroupId=packageName -DartifactId=projectName  
+2. 创建Maven的Web项目：   
+    mvn archetype:create 
+    -DgroupId=packageName    
+    -DartifactId=webappName 
+    -DarchetypeArtifactId=maven-archetype-webapp    
+3. 编译源代码： mvn compile 
+4. 编译测试代码：mvn test-compile    
+5. 运行测试：mvn test   
+6. 产生site：mvn site   
+7. 打包：mvn package   
+8. 在本地Repository中安装jar：mvn install 
+9. 清除产生的项目：mvn clean   
+10. 生成eclipse项目：mvn eclipse:eclipse  
+11. 生成idea项目：mvn idea:idea  
+12. 组合使用goal命令，如只打包不测试：mvn -Dtest package   
+13. 编译测试的内容：mvn test-compile  
+14. 只打jar包: mvn jar:jar  
+15. 只测试而不编译，也不测试编译：mvn test -skipping compile -skipping test-compile 
+      ( -skipping 的灵活运用，当然也可以用于其他组合命令)  
+16. 清除eclipse的一些系统设置:mvn eclipse:clean  
+17. 使用本地包编译(需留意版本一致)：
+	pom.xml文件中 配置dependency如下<dependency><groupId>javax.servlet</groupId><artifactId>servlet-api</artifactId><version>1.1.1</version></dependency>
+  本地库目录下增加如下目录javax\servlet\servlet-api\1.1,把对应包放入
+  
+
+antlr： Another Tool forLanguage Recognition 基于Java 开发的语言识别工具，一般用于构建 Domain-Specific Languages (DSL)。用户编写好特定语言的语法文件后，ANTLR 会根据该语法文件生成相应的源代码来识别该语言
+Axis：是Apache组织推出的后继SOAP的SOAP引擎项目，还包括独立运行的SOAP服务器，servlet引擎的插件，对WSDL的扩展支持，将WSDL的描述生成JAVA类的工具，监控TCP/IP包的工具
+barbecue/barcode4j 是一个Java条形码解决方案,可以支持创建许多格式的条形码
+batik 使用SVG来实现各种功能的应用程序的JAVA工具包
+bcmail 用于解决JMeter源码编译失败的问题
+bcprov 与bcmail-jdk16-146.jar,lcrypto-jdk15.jar配合使用，作用与java ZIP的压缩、解压缩(同时加解密)
+bsf 一个支持在Java应用程序内调用脚本语言 (Script)，并且支持脚本语言直接访问Java对象和方法的一个开源项目，可以使用它在java application中使用javascript, Python, XSLT, Perl, tcl, ……等脚本语言. 反过来也可以,就是在这些脚本语言中调用任何已经注册过了的JavaBean,java object。
+bsh bean用字符串来描述java代码，然后可以运行这些字符串。
+derby 用java编写的数据库
+drools 开源的规则引擎，可以将复杂多变的规则从硬编码中解放出来，以规则脚本的形式存放在文件中，使得规则的变更不需要修正代码重启机器就可以立即在线上环境生效
+edtftpj 是一个FTP客户端库,可让任何Java应用程序能有充分的嵌入式FTP功能
+ehcache 进程内缓存框架，具有快速、精干等特点，是Hibernate中默认的CacheProvider。 Ehcache是一种广泛使用的开源Java分布式缓存
+elasticsearch 分词工具
+eigenbase 建造高级数据管理系统的工具平台
+esapi 自由开源的web程序安全控制库，它可以让程序员很容易的写出低风险的程序。The ESAPI for Java library is 旨在让程序员很容易的改进现有程序的安全。 ESAPI for Java 也为新的开发奠定了坚实的基础。
+feed4j With feed4j you can parse XML feeds in several formats and handle them within your Java application through the feed object representation given by the library 
+ftp4che 基于nio的ftp工具包
+georss-rome 描述和查明互联网内容所在物理位置的方法。通过使用GeoRSS，搜索Web站点或者与地理位置有关的项目就成为可能。此外，GeoRSS有助于将RSS feed立即分发到基于事件类型和位置的特定用户
+groovy 基于JVM(Java虚拟机)的敏捷开发语言，它结合了Python、Ruby和Smalltalk的许多强大的特性
+guava 一个包含了若干被Google Java项目广泛依赖的核心工具库，例如：集合 [collections] 、缓存 [caching] 、原生类型支持 [primitives support] 、并发库 [concurrency libraries] 、通用注解 [common annotations] 、字符串处理 [string processing] 、I/O 等
+hsqldb 开放源代码的JAVA数据库，其具有标准的SQL语法和JAVA接口，它可以自由使用和分发，非常简洁和快速的
+infobright 开源的mysql的插件式数据仓库引擎
+ini4j  简单的Java类库,用来读写Windows的ini配置文件
+jackcess 一个纯Java包用于读取和写入MS Access数据库.它不是一个应用程序,没有GUI只是一个Java类库
+jackson,json-simple 高效的处理 JSON 格式数据的类库
+javacc 最受欢迎的语法分析生成器。这个分析生成器工具可以读取上下文无关且有着特殊意义的语法并把它转换成可以识别且匹配该语法的JAVA程序
+JFlex、JavaCUP Java语言实现的 CUP 解析器生成器
+javadbf 动态生成和解析DBF数据文件的类库
+javassist, ASM, CGLib字节码编辑工具,可以直接编辑和生成Java生成的字节码,以达到对.class文件进行动态修改的效果
+ASM：小巧轻便的基于bytecode层面上操控Java的框架，它能方便地生成和改造 Java 代码。Hibernate和Spring在底层都用到了ASM 
+CGLib的底层基于ASM实现，是一个高效高性能的生成库；而ASM是一个轻量级的类库，但需要涉及到JVM的操作和指令；相比而言，Javassist要简单的多，完全是基于Java的API，但其性能相比前二者要差一些
+jaybird Firebird数据库的驱动类库
+jcifs JCIFS是CIFS(公共的或开放的SMB协议版本)开源项目
+jcommon 是一组有用的classes集合.它已经用在JFreeChart,JFreeReport与其它项目上. 这个类库包含了以下功能: * 文本工具类(text utilities), * 用来显示关于应用程序信息的用户界面类, * 布局定制管理器, * 一个日期选择面板, * 序列化工具类, * XML解析器支持类.
+jetty 性能极佳，配置简单方便的servlet容器，对比tomcat有一下特点：架构更为简洁高效，基于Handler来实现扩展简单，NIO模式在处理I/O请求上更占优势
+jface Eclipse组织为了开发Eclipse IDE环境所编写的一组底层图形界面 API,其底层实现为SWT，扩展了 SWT并能与 SWT 交互操作
+jlfgr 
+joda-time 面向 Java 应用程序的日期/时间库的替代选择
+jsch SSH2的一个纯Java实现。它允许你连接到一个sshd 服务器，使用端口转发，X11转发，文件传输等
+jsendnsca jsendnsca是一个jar包，封装了向Naios发送消息的方法
+jsonpath 对于 JSON 来说相当于 XPATH 对于 XML。这是一个简单的从文档中抽取指定信息的工具，提供多种语言实现版本，包括：Javascript, Java, Python 和 PHP
+jtds 第三方开源的SQL Server/Sybase数据库的JDBC驱动程序
+jug 
+ldapjdk 轻量级目录协议的java实现库
+libbase,libdocbundle,libfonts,libformat,libformula,libloader,libpixie,librepository,libserializer,libsparkline ,libswing,libxml 报表引擎对应的jar包
+jersey  JAX-RS(JSR311)开源参考实现用于构建RESTful Web service的框架
+mail 与javaMail有关的jar包，使用javaMail时应与mail.jar一起加入到lib中去，具体负责mail的数据源和类型等
+AndroMDA 是一个遵循模型驱动结构(MDA)范例的代码生成框架,它从CASE工具中获得的一个UML模型并生成一个完全可部署的应用程序和其它组件
+jmi,jmiutils,mdrapi,mof,nbmdr 是atl的工具包，ATL是ATLAS转换语言的简称，它是ATLAS研究组开发出来的一种符合OMG的一个QVT提案的模型转换语言
+jmi java和matlab(用于算法开发、数据可视化、数据分析以及数值计算的高级技术计算语言)的连接类，是matlab正版软件的自带库
+metastore 原数据处理 
+mondrian,Rolap,olap4j  基于Java的OLAP(在线分析性处理)数据仓库处理引擎，用MDX语言实现查询，从关系数据库(RDBMS)中读取数据。然后经过Java API用多维的方式对结果进行展示
+monetdb 开源的面向列的数据库管理系统。MonetDB被设计用来为较大规模数据(如几百万行和数百列的数据库表)提供高性能查询的支持
+mstor: extensible framework for JavaMail local store providers
+mvel2 一个类似于OGNL的表达式语言解释工具 
+nekohtml HTML页面中提取数据的工具，整理HTML格式不完整的缺陷，最终生成一个DOM Tree，再通过XPath就可以轻松获取所需数据了
+odfdom  简单易用的操作、修改、创建ODF(OpenDocument Format)开放文档的工具
+openide-util netbean工具包
+oro  全面以及优化得最好的正则表达式API之一
+rome 和jdom一起的RSS数据解析工具
+rsyntaxtextarea  支持语法着色的Java 可视化编辑器控件
+secondstring 文本匹配工具
+scannotation 扫描工程内注解的工具包
+salesforce-partner 业务流程处理的工具包
+sapdbc sap是“Systems Applications and Products in Data Processing”的简称，企业管理系统的工具库
+SassyReader 读取sas(商业智能计算技术)文件数据的开源工具
+saxon xml数据或文件转换工具
+jndi Java命名和目录接口，一种标准的命名系统接口
+snakeyaml YAML解析器
+snappy  压缩和解压缩的工具包
+snmp4j 实现SNMP(简单网络管理协议)协议的开源项目.它支持以命令行的形式进行管理与响应
+sqlite-jdbc 开源的嵌入式关系数据库,实现自包容、零配置、支持事务的SQL数据库引擎
+stax XML解析的另外一种方式是StAX，相比于SAX需要安装事件处理器，StAX需要循环来迭代所有的事件
+syslog4j 实现Syslog(RFC3164)协议的Java开源类库包括客户端与服务器端，一个基于c/s模式的日志收集系统
+trilead-ssh2 java连接ssh的开源库，支持sftp
+validation-api  数据校验工具包
+wstx-asl compass(强大的,事务的,高性能的对象/搜索引擎映射框架)项目下的一个JAR包
+xalan xslt(扩展样式表转换语言)处理工具,用来将XML文件转换为HTML,TEXT和XML等其他类型文件格式
+xercesImpl xml信息解析工具包
+xmlbeans XML数据处理工具，通过利用XML Schema的功能来提供结构化和约束性数据类型，开发者可以像Java对象那样直接访问XML文档
+xmlpull，xpp3 XML Pull Parser，较古老的XML解析方式，性能上很优秀，工作方式为允许你的应用程序代码主动从解析器中获取事件，可以在满足了需要的条件后不再获取事件
+SAX是基于事件流的解析，DOM是基于XML文档树结构的解析。 
+xstream xStream可以轻易的将Java对象和xml文档相互转换,而且可以修改某个特定的属性和节点名称,而且也支持json的转换
+registry java操作注册表所必须的jar
+Pushlet (一种comet 架构的实现)基于Servlet 机制，从server端推送(push)数据到客户端浏览器的(动态)HTML 页面，帮助客户端发送请求，订阅感兴趣的事件
+activation.jar:与javaMail有关的jar包，使用javaMail时应与mail.jar一起加入到lib中去，具体负责mail的数据源和类型等
+ajaxtags-1.2-beta3.jar:ajax提供的标签库，使用户能像使用jsp普通标签一样使用ajax
+ant.jar和antlr.jar(可以删去):的是ant编译用的包，在工程中不用添加
+asm.jar:Hebernate的包，Hibernate在运行时使用这个代码生成库增强类(与java反射机制联合使用).ASM字节码库，cglib.jar包依赖的包。必需的jar包。
+axis-ant.jar:是Axis为支持Ant构建，提供了的文件。该文件包含三个可选任务(task)的定义和实现：axis-wsdl2java，axis-java2wsdl和axis-admin。
+cglib-2.1.3.jar:全称是Code Generation Library，它可以用来动态继承Java类或者实现接口，很多知名的开源项目中用到了它.Hibernate用它来实现PO字节码的动态生成，非常核心的库，必需的jar包。
+chartengineapi.jar:不大清楚，大概是Birt关于字体的类库。
+com.ibm.icu_3.6.1.v10070417.jar:从3.2版本开始，eclipse就增加了一个com.ibm.icu插件，用于增强对多语言的支持。应该是没用的。
+commons-beanutils.jar:下面几个带“commons”的都是Apache Commons包中的一个，这里是被hibernate使用的，估计在工程中没有全部用到这些包，所以有的应该能删去。本包包含了一些Bean工具类类，是必须使用的jar包。
+commons-cli-1.0.jar:这是一个处理命令的工具。比如main方法输入的string[]需要解析。你可以预先定义好参数的规则，然后就可以调用CLI来解析。
+commond-collections.jar:包含了一些Apache开发的集合类，功能比java.util.*强大。必须使用的jar包.
+commons-digester.jar:它能方便地将XML文档所定义的元素转化为JAVA对象，其实它的用法有点象栈(当然内在的原理就是那个古老的东西,只是提供了更高一层的封装)。
+commons-discovery-0.2.jar:discovery模式的实现，提供定位与实例化类或其他资源的通用方法。使用最好的算法得到接口的所有实现。当用户想找到所有的提供某一服务的提供商时，这将特别有用
+commons-fileupload.jar:jsp的上传文件功能
+commons-io.jar:可以看成是java.io的扩展
+commons-lang.jar:包含了一些数据类型工具类，是java.lang.*的扩展。必须使用的jar包。 
+commons-pool-1.2.jar:DBCP数据库连接池，Apache的Jakarta组织开发的，Tomcat4的连接池也是DBCP。
+commons-validator.jar:用来帮助进行验证的工具。比如验证Email字符串，日期字符串等是否合法。
+coreapi.jar:一种应用的核心 类库，这里是Birt的核心包。
+dataadapterapi.jar:Birt的有关数据处理的包，具体作用还没摸清楚。
+dom4j-1.4.jar:是一个Java的XML API，类似于jdom，用来读写XML文件的。Hibernate使用dom4j解析XML配置文件和XML映射元文件。必需的。
+dteapi.jar:Birt的有关数据处理的包，具体作用还没摸清楚。
+dwr.jar:dwr的核心包
+ehcache-1.2.jar:Hibernate可以使用不同cache缓存工具作为二级缓存。EHCache是缺省的cache缓存工具。如果没有其它的可选缓存工具，则为必需的。
+engineapi.jar:Birt的有关数据集的包
+FCKeditor.jar:支持FCKEditor的图片文件上传和浏览的包
+flute.jar:有关解析css的类库，谁的还没弄清楚
+freemarker.jar:是webwork的包，FreeMarker允许Java servlet保持图形设计同应用程序逻辑的分离，这是通过在模板中密封HTML完成的。模板用servlet提供的数据动态地生成HTML。
+hibernate3.jar:hibernate3的核心类库。
+itext.jar:java：是用于生成PDF文档的一个java类库。通过iText不仅可以生成PDF或rtf的文档，而且可以将XML、Html文件转化为PDF文件。
+iTextAsian.jar:itext中关于亚洲编码的类库，在这里用于中文字体的输入。
+jasperreports.jar:有关报表功能的类库
+javamail.jar:javamail的核心类，提供了mail发送的基本接口。
+jaxrpc.jar:(java APIs for XML-Based Remote Procedure Call，JAX-RPC)将XML 类型转换为 Java 类型，以确保 Web 服务客户机和基于Java 的应用程序之间能够进行平稳的数据交换。是spring需要的。
+jenkov-prizetags-bin-3.2.0.jar:一个集许多功能于一身的Jsp标签库。其中最受欢迎的Tree Tag，这个Tag可以为不同节点指定
+js.jar:java关于处理javascript的类库。
+jstl.jar:(jsp standard taglib)jstl的核心标签库。
+jta.jar:java的事务规范，当用到事务处理时是必需的，hebernate中用到。
+jxl.jar:(java excel api)是一个韩国人写的处理Excel的类库，能够方便的导入和到处Excel。
+log4j.jar:日志包，可以更加详细的记录日志。可选的。
+modelapi.jar:birt关于报表生成的类库，具体功能有待考究。
+mysql-connector-java-5.0.5-bin.jar:mysql的数据库联接驱动，符合JCA 规范，如果你在App Server上把Hibernate配置为mysql数据库联接池的话，就需要这个jar。
+ognl.jar:OGNL(Object Graph Navigation Language)是一种表达式语言,使用它可以使表达式与java对象中的getter和setter属性绑定,且一个OGNL表达式可以进行存和??方面的操作.ognl.jar是java对ognl的支持，webwork加载的。
+org.eclipse.birt.report.viewer.nl1_2.2.0.v20070526-1010.jar:有关Birt的报表生成的类库
+org.eclipse.emf.common_2.2.1.v200702131851.jar:　 　EMF根据ecore建模(可以和schema的xsd相互转换)生成强类型的EMF代码. 这个强类型更强的地方是可以取得meta信息,从而可以用于校验和界面辅助信息的生成.类似于动态bean,属性也可以根据名称动态取得，这几个类库都与 Birt的报表生成有关
+org.eclipse.emf.ecore.xmi_2.2.2.v200702131851.jar
+org.eclipse.emf.ecore_2.2.2.v200702131851.jar
+oscore.jar:webwork的一个通用功能类库
+poi.jar:Apache的操作数据转换的类库，能导入和到处Excel，与jxl.jar功能重复。
+proxool-0.9.0RC3.jar:是一个连接池，如果你准备用这个连接池，就需要这个jar包。 
+quartz-1.6.0.jar:一个定时器
+rife-continuations.jar:rife原来是一个基于组件模型的Java Web框架，被webwork集成。
+saaj.jar:SOAP with Attachments API for Java。能为java提供按照SOAP规范的收发信息。谁带进来的有待考究。
+sac.jar:Simple API for CSS,java处理CSS的类。
+scriptapi.jar:能够在Java中使用脚本语言引擎，在脚本语言和Java之间交换数据。可能是Birt引入的。
+sitemesh.jar:Sitemesh 是一个基于WEB页面的布局、装饰以及应用整合的开源框架。它能帮助我们在由大量页面构成的项目中创建一致的页面布局和外观，如一致的导航条，一致的 banner，一致的版权，等等。它不仅仅能处理动态的内容，如jsp，php，asp等产生的内容，它也能处理静态的内容，使得它的内容也符合你的页面 结构的要求.sitemesh.jar是其类库
+spring.jar:spring的核心类库。
+standard.jar:jstl的类库，包含TLD 和标记句柄。
+velocity-dep.jar: webwork的包。依赖的Velocity类库
+velocity-tools-view.jar:同上
+velocity.jar:webwork带来的包。是一个的模板引擎(template engine)。它允许任何人仅仅简单的使用模板语言(template language)来引用由java代码定义的对象。
+webwork-2.2.5.jar:webwork的核心类库。
+wsdl4j-1.5.1.jar:一个可扩展的 WSDL 分析框架,WSIF 在此基础上进行构建。AXIS必需的包。
+xwork.jar:包含webwork构建所依赖的xwork类库，webwork是基于xwork的
+jsse Java(TM) Secure Socket Extension,是基于安全算法和握手机制之上的合成体
+jce 3DES加密解密算法 
+jfr
+access-bridge
+dnsns 与 DNS 有关
+jaccess
+localedata locale data for java.text and java.util
+sunec
+sunjce 指定加密算法下的密文生成工具
+sunmscapi sun发布的数字签名工具包
+zipfs 
+charsets.jar：Java 字符集，这个类库中包含 Java 所有支持字符集的字符
+
+scrum
+站立会议  任务看板-颜色标签  计划纸牌
+
+从系统架构来说，目前的主流企业服务器基本可以分为三类：SMP (Symmetric Multi Processing，对称多处理架构)，NUMA (Non-Uniform Memory Access，
+非一致存储访问架构)，和MPP (Massive Parallel Processing，海量并行处理架构)。三种架构各有特点，本文将重点聊聊NUMA。
+1.SMP(Symmetric Multi Processing)
+ SMP是非常常见的一种架构。在SMP模式下，多个处理器均对称的连接在系统内存上，所有处理器都以平等的代价访问系统内存。它的优点是对内存的访问是平等、
+ 一致的；缺点是因为大家都是一致的，在传统的 SMP 系统中，所有处理器都共享系统总线，因此当处理器的数目增多时，系统总线的竞争冲突迅速加大，
+ 系统总线成为了性能瓶颈，所以目前 SMP 系统的处理器数目一般只有数十个，可扩展性受到很大限制。
+ 
+2.MPP (Massive Parallel Processing)
+ MPP则是逻辑上将整个系统划分为多个节点，每个节点的处理器只可以访问本身的本地资源，是完全无共享的架构?诘阒涞氖萁换恍枰砑凳?
+ 它的优点是可扩展性非常好；缺点是彼此数据交换困难，需要控制软件的大量工作来实现通讯以及任务的分配、调度，对于一般的企业应用而言过于复杂，效率不高。
+ 
+3.NUMA(Non-Uniform Memory Access)
+ NUMA架构则在某种意义上是综合了SMP和MPP的特点：逻辑上整个系统也是分为多个节点，每个节点可以访问本地内存资源，也可以访问远程内存资源，
+ 但访问本地内存资源远远快于远程内存资源。它的优点是兼顾了SMP和MPP的特点, 易于管理，可扩充性好；缺点是访问远程内存资源的所需时间非常的大。
+ 
+黑盒测试--功能测试， 白盒测试--结构测试， 性能测试
+
+
+Jrebel 快速实现热部署的工具，节?舜罅恐仄羰奔洌岣吡烁鋈丝⑿?
+Grails 和 spring roo 是用于快速Web应用开发的开源框架，它基于Groovy编程语言，并构建于Spring、Hibernate等开源框架之上，是一个高生产力一站式框架
+Nagios 是一款开源的免费网络监视工具，能有效监控Windows、Linux和Unix的主机状态，交换机路由器等网络设置，打印机等。在系统或服务状态异常时发出邮件或短信报警第一时间通知网站运维人员
+LucidDb 一个为数据仓库目的建造的数据库,同样也有列储存,bitmap indexing , hash join/aggregation 等常见数据仓库技术
+Groovy 是一种基于JVM(Java虚拟机)的敏捷开发语言，它结合了Python、Ruby和Smalltalk的许多强大的特性，Groovy 代码能够与 Java 代码很好地结合，也能用于扩展现有代码
+Guice 是Google开发的一个轻量级，基于Java5(主要运用泛型与注释特性)的依赖注入框架(IOC)。Guice非常小而且快 类型安全的，能够对构造函数，属性，方法(包含任意个参数的任意方法，而不仅仅是setter方法)进行注入
+Emma 和 Jacoco 代码覆盖率测试工具
+neo4j 一种擅长处理图形的数据库。 据说非常适合做一些join关系型的查询 ACID事务 高可用 可伸缩到亿级结点、关系 高速遍历
+curl 是利用URL语法在命令行方式下工作的开源文件传输工具
+ionic 是一个用来开发混合手机应用的，开源的，免费的代码库。可以优化html、css和js的性能，构建高效的应用程序，而且还可以用于构建Sass和AngularJS的优化
+PhoneGap 是一款开源的免费移动应用开发框架，能够让开发者使用HTML、JavaScript、CSS等Web技术来开发跨平台移动App，支持iOS、Android、BlackBerry、webOS、Windows Phone、Symbian以及bada系统平台
+Firebase 移动后端服务提供商，公司于去年启动了其JavaScript API和云服务，主要为Web App开发者提供后端数据的实时处理服务。使用Firebase的开发者无需担心数据存储问题，无需架设自己的服务器，就可以让自己的App实时更新数据，App用户也无需刷新页面获取新数据
+thrift是一种可伸缩的跨语言服务的发展软件框架。它结合了功能强大的软件堆栈的代码生成引擎，以建设服务，工作效率和无缝地与C + +，C#，Java，Python和PHP和Ruby结合
+
+界面控件(JS 组件)我推荐 jQuery easy UI，内置控件适合企业应用，扩展机制比较完善。如果是互联网式简洁风格，则推荐 Bootstrap，范例http://linode.jianyu.im:8000。
+
+mysql
+create database kettle; grant all privileges on kettle.* to kettle@'%'; flush privileges;
+
+orcle
+drop user GGJS_KETTLE cascade;
+drop tablespace GGJS_KETTLEDATA including contents and datafiles;
+create tablespace SJPT_KETTLEDATA datafile 'D:/app/Administrator/oradata/SJPT_KETTLEDATA.DAT' size 50M autoextend on next 10M maxsize UNLIMITED online permanent extent management local autoallocate;
+create user SJPT_KETTLE identified by A default tablespace SJPT_KETTLEDATA;
+grant resource to SJPT_KETTLE;
+grant connect to SJPT_KETTLE;
+grant select_catalog_role to SJPT_KETTLE;
+grant alter session to SJPT_KETTLE;
+grant create any trigger to SJPT_KETTLE;
+grant create cluster to SJPT_KETTLE;
+grant create database link to SJPT_KETTLE;
+grant create any procedure to SJPT_KETTLE;
+grant create procedure to SJPT_KETTLE;
+grant create sequence to SJPT_KETTLE;
+grant create session to SJPT_KETTLE;
+grant create any synonym to SJPT_KETTLE;
+grant create any table to SJPT_KETTLE;
+grant create type to SJPT_KETTLE;
+grant create any view to SJPT_KETTLE;  
+grant create job to SJPT_KETTLE;
+grant debug connect session to SJPT_KETTLE;
+grant select any dictionary to SJPT_KETTLE;
+grant unlimited tablespace to SJPT_KETTLE;
+
+kettle
+-Xmx512m 
+-XX:MaxPermSize=256m 
+-Djava.library.path=libswt\win64 
+-DKETTLE_HOME= 
+-DKETTLE_REPOSITORY= 
+-DKETTLE_USER= 
+-DKETTLE_PASSWORD= 
+-DKETTLE_PLUGIN_PACKAGES= 
+-DKETTLE_LOG_SIZE_LIMIT=
+
+route print -4    route delete 192.168.1.59     pathping www.baidu.com     
+-Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=y
+java -cp dbtest.jar:* cn.sinobest.dbtest.OracleTest 10.160.25.253:1521:mhwbdb DSJ_BJPT DSJ_BJPT
+
+oracle-12514:
+方法1.net manager--监听程序--listener，右侧选择“数据库服务”，添加对应数据库
+方法2.安装目录下面找到listner.ora文件
+(SID_LIST =
+    (SID_DESC =
+      (SID_NAME = CLRExtProc)
+      (ORACLE_HOME = d:\app\Administrator\product\11.2.0\dbhome_1)
+      (PROGRAM = extproc)
+      (ENVS = "EXTPROC_DLLS=ONLY:d:\app\Administrator\product\11.2.0\dbhome_1\bin\oraclr11.dll")
+    )
+    --在原始的文件中加入下面内容，即将你创建的数据库的SID描述告知给监听器。---
+    (SID_DESC =
+     (GLOBAL_DBANAME = orcl)
+     (ORACLE_HOME = d:\app\Administrator\product\11.2.0\dbhome_1)
+     (SID_NAME = orcl)
+    )
+  )
+
+天魔 困惑-猪八   暗血魔
+圣战 地狱-比奇   暗骷髅
+法神 堕落-沃玛上 暗黄泉
+霓裳 死亡-封魔   暗虹魔
+天尊 深渊-沃玛下 暗金刚
+天师 钳虫-白日   暗沃玛
+  
+5到7：左，上3，右；
+5到药：右，左 
+药到5：左4，上3，下
+7到药：左2，上1，左1； 
+任意房到药：左到有两个卫士的房间，上，左（若一次到不了药店，重复上述走法，最多3次，可以到药） 
+  
+黑矿：决定持久的唯一因素，无关成功率。
+0-30 100%降3点持久
+30-60 80%降1点持久，20%降3点持久
+60-90 80%不降持久，20%降1点持久
+90-120 80%升1点持久，20%不升持久
+120-150 80%升3点持久，20%升1点持久
+150-180 100%升3点持久
+注：系统只取纯度 最高的6块黑矿，多放系统不计。举例来说，放6个纯度4的黑矿和放30持久4的矿一样都是降3个持久。
+
+首饰：决定成功率的唯一因素，不过并非必须品
+道、魔、攻各属性2个。3属性中哪个高就升哪个；如属性相同则各会有33%的机会；如没有任何属性(没放或放了坚固等首饰)，系统会默认1点道数。
+首饰属性取上下限之和，最高10分，高于10也只取10分。第二个首饰属性要除以3取整，然后乘以90%就是成功率。最高可以得到90%的成功率
+武士升攻击为例来
+不放首饰，升道， 1*0.9=9%
+一个古铜，升攻， 1*0.9=9%
+二个蓝翡，升攻， 4+(4/3)=5* 0.9=45%
+二个珊瑚，升攻， 4+(4/3)=5* 0.9=45%
+二个幽灵，升攻， 5+(5/3)=6* 0.9=54%
+二个记忆，升攻， 6+(6/3)=8* 0.9=72%
+绿色+记忆，升攻 ，7+(6/3)=9 *0.9=81%
+二个绿色，升攻， 7+(7/3)=9* 0.9=81%
+圣链+记忆，升攻 ，9+(6/3)=11(最高为10，浪费1)*0.9=90%
+注：升攻的话1个圣链+1个骷髅戒就可以得到满分90%的成功率。二个记忆性价比最高，6点属性刚好能被3整除。
+
+1号机：13.92 zookeeper+ganger
+2号机：14.53 zookeeper+mcenter+webui 
+3号机： 16.9 zookeeper+worker
+
+asp挂webshell
+1. 检测入侵条件：有页面可提交一句话脚本、能获取到保存脚本的数据库文件（ebook.asp）
+2. 在可提交页面提交一句话脚本
+3. 打开浏览器客户端，地址指向该数据库文件ebook.asp，输入框粘贴桂林老兵网站管理助手ASP代码，进行提交
+4. ASP代码会保存到与数据库文件同一目录下，再用普通浏览器访问该文件即打开webshell
+
+Tomcat主要有两个组件，连接器和容器，所谓连接器就是一个http请求过来了，连接器负责接收这个请求，然后转发给容器。容器即servlet容器，容器有很多层，分别是Engine，Host，Context，Wrapper。最大的容器Engine，代表一个servlet引擎，接下来是Host，代表一个虚拟机，然后是Context，代表一个应用，Wrapper对应一个servlet。从连接器传过来连接后，容器便会顺序经过上面的容器，最后到达特定的servlet。要说明的是Engine，Host两种容器在不是必须的。实际上一个简单的tomcat只要连接器和容器就可以了，但tomcat的实现为了统一管理连接器和容器等组件，额外添加了服务器组件（server）和服务组件（service），添加这两个东西的原因我个人觉得就是为了方便统一管理连接器和容器等各种组件。一个server可以有多个service，一个service包含多个连接器和一个容器
+
+ eclipse源码启动
+ D:\program\java\jdk1.7.0_72\bin\javaw.exe 
+ -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:64762 
+ -Dfile.encoding=GBK 
+ -classpath D:\work\workspace-sinobest\tomcat7061-src\bin;D:\work\workspace-sinobest\tomcat7061-src\lib\ant.jar;D:\work\workspace-sinobest\tomcat7061-src\lib\core-3.4.2.v_883_R34x.jar;D:\work\workspace-sinobest\tomcat7061-src\lib\jaxrpc-api-1.1.jar;D:\work\workspace-sinobest\tomcat7061-src\lib\wsdl4j-1.6.2.jar org.apache.catalina.startup.Bootstrap
+ 
+ eclipse插件启动
+ D:\program\java\jdk1.7.0_72\bin\javaw.exe 
+ -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:64993 
+ -Dcatalina.home=D:\program\apache-tomcat-7.0.61 
+ -Djava.endorsed.dirs=D:\program\apache-tomcat-7.0.61\endorsed 
+ -Dcatalina.base=D:\program\apache-tomcat-7.0.61 
+ -Djava.io.tmpdir=D:\program\apache-tomcat-7.0.61\temp 
+ -Dfile.encoding=GBK 
+ -classpath D:\program\apache-tomcat-7.0.61\bin\bootstrap.jar;D:\program\apache-tomcat-7.0.61\bin\tomcat-juli.jar;D:\program\java\jdk1.7.0_72\lib\tools.jar org.apache.catalina.startup.Bootstrap -config D:\program\apache-tomcat-7.0.61\conf\server.xml start
+ 
+ tomcat启动
+  D:\program\java\jdk1.7.0_72\bin\javaw.exe 
+  -Djava.util.logging.config.file=""
+  -Djava.util.logging.manager=
+  -agentlib.jdwp=

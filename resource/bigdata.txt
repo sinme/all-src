@@ -1,0 +1,536 @@
+rabbitMQ
+ActiveMQ
+zoreMQ
+memcacheQ
+Redis
+kafka  linkedin开源的消息队列 zookeeper
+Apache Phoenix:HBase的SQL驱动,使得HBase支持通过JDBC的方式进行访问，并将你的SQL查询转成HBase的扫描和相应的动作。
+thrift Facebook实现的一种高效的、支持多种编程语言的远程服务调用的框架
+scribe facebook开源的日志收集工具
+chukwa yahoo发起开源的基于hdfs的日志收集工具 注重收集后的分析处理
+Flume  cloudera开源的日志收集工具 注重分布式收集的性能和高可用 zookeeper
+
+
+压缩格式  split  native  压缩率  速度    是否hadoop自带  linux命令  压缩后，原应用程序是否要修改   适用场景
+gzip       否      是    很高    比较快  是，直接使用     有        和文本处理一样，不需修改       单个文件压缩之后在130M以内的（1个块大小内
+lzo        是      是    比较高  很快    否，需要安装     有        需要建索引，需要指定输入格式   单个大文件，压缩后>200m, 越大越有效
+snappy     否      是    比较高  很快    否，需要安装    没有       和文本处理一样，不需修改       制作中间文件（map到reduce,或mapreduce到mapreduce）
+bzip2      是      否    最高    慢      是，直接使用     有        和文本处理一样，不需修改       单个很大文件想压缩空间，又需要支持split
+
+hadoop安装
+安装jdk到/usr目录下
+免密码ssh登录(注意权限：chmod 600 ~/.ssh/authorized_keys)
+ssh-keygen -t rsa
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+解压HADOOP后修改
+hadoop-env.sh JAVA路径 最大堆内存
+yarn-env.sh JAVA最大堆内存 YARN最大内存
+
+hadoop编译
+yum install ncurses-devel cmake openssl-devel automake  gcc svn autoconf automake libtool unzip
+Unable to load native-hadoop library for your platform问题
+export HADOOP_ROOT_LOGGER=DEBUG,console
+hadoop fs -text /tmp/access.log
+more /tmp/access.log
+查看error libhadoop.so  /lib64/libc.so.6 required (libc 2.14)    /usr/local/hadoop/lib/native/Linux-amd64
+查看strings /lib64/libc.so.6 |grep GLIBC 可发现没有2.14,说明系统中glibc的版本过低，需要升级
+00:50:56:3D:FB:80
+hadoop增加节点
+新节点，配置完重启：
+vi /etc/udev/rules.d/70-persistent-net.rules 修改节点MAC(字母要小写)
+vi /etc/sysconfig/network 修改主机名
+vi /etc/sysconfig/network-scripts/ifcfg-eth0 修改节点IP和MAC
+master：
+vi /etc/hosts 增加新节点IP和主机名
+尝试免密码登陆新节点
+scp /etc/hosts grid2:/etc/hosts 分发hosts文件给所有节点
+vi ~/hadoop2/etc/hadoop/slaves 增加新节点主机名
+scp ~/hadoop2/etc/hadoop/slaves grid2:~/hadoop2/etc/hadoop/slaves 分发slave文件给所有节点
+冷添加后启动：
+start-dfs.sh 启动dfs
+start-yarn.sh 启动yarn
+start-balancer.sh 平衡节点
+热添加后新节点执行：
+hadoop-daemon.sh start datanode
+yarn-daemon.sh start nodemanager
+start-balancer.sh 平衡节点
+
+hadoop集群
+00:50:56:33:09:1A network  ifcfg-eth0  net.rules  
+配置hosts文件:DNS
+建立hadoop运行账号 
+配置ssh免密码连入:NFS
+下载并解压hadoop安装包 
+配置namenode，修改site文件 
+配置hadoop-env.sh 
+配置masters和slaves文件:MASTER处理
+向各节点复制hadoop:AWK
+
+格式化namenode 
+启动hadoop 
+用jps检验各后台进程是否成功启动 
+
+3.  安装MySQL
+a) 安装与配置
+这里安装的是MySQL绿色版，好处是全过程可控，当然图方便可以安装RPM。
+1. 安装tar.gz
+tar zxvf mysql-5.6.12-linux-glibc2.5-i686.tar.gz
+mv mysql-5.6.12-linux-glibc2.5-i686 /usr/local/mysql
+
+2. 创建组、用户，授权
+groupadd mycluster
+useradd -g mycluster -G root -d /home/mycluster mycluster 
+passwd qcpass@lh
+cd /usr/local/mysql
+chown -R mycluster .
+chgrp -R mycluster .
+scripts/mysql_install_db --user=mycluster
+chown -R root .
+chown -R mycluster data
+chmod u+x data/ibdata1
+mv mycluster11.err mycluster11.err_
+
+3. 配置文件
+mv /etc/my.cnf /etc/my.cnf_
+cp support-files/my-default.cnf /etc/my.cnf
+vi /etc/my.cnf避免以前安装过MySQL
+[mysqld]
+basedir=/usr/local/mysql
+datadir=/usr/local/mysql/data
+character-set-server=utf8
+lower_case_table_names=1
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES
+
+b) 启动与测试
+1. 启动
+mv /etc/init.d/mysql /etc/init.d/mysql_
+cp support-files/mysql.server /etc/init.d/mysql
+service mysql start
+chkconfig --add mysql避免以前安装过MySQL
+立即启动
+开机启动
+
+2. 修改密码
+vi /mycluster/.bash_profile
+export PATH=/usr/local/mysql/bin:$PATH
+source /mycluster/.bash_profile
+mysql -u root -p
+mysql> set password = password(&apos;root&apos;); 
+root密码为空
+修改密码为root
+
+4.  安装Hive
+a) 安装与配置
+1. 解压。
+tar zxvf apache-hive-0.13.1-bin.tar.gz
+echo &apos;export HIVE_HOME=/home/mycluster/apache-hive-0.13.1-bin&apos; >> /home/mycluster/.bashrc 
+echo &apos;export PATH=$HIVE_HOME/bin:$PATH&apos; >> /home/mycluster/.bashrc
+2. 在HDFS中创建Hive目录。
+hadoop fs -mkdir /tmp
+hadoop fs -mkdir /user/hive/warehouse
+hadoop fs -chmod g+w /tmp
+hadoop fs -chmod g+w /user/hive/warehouse
+
+3. 创建MySQL数据库。
+create database hive character set latin1;
+
+4. 配置文件。
+cd apache-hive-0.13.1-bin/conf
+cp hive-default.xml.template hive-site.xml
+vi hive-site.xml
+<configuration>
+<property>
+<name>javax.jdo.option.ConnectionURL</name>
+<value>jdbc:mysql://localhost:3306/hive</value>
+</property>
+<property>
+<name>javax.jdo.option.ConnectionDriverName</name>
+<value>com.mysql.jdbc.Driver</value>
+</property>
+<property>
+<name>javax.jdo.option.ConnectionUserName</name>
+<value>root</value>
+</property>
+<property>
+<name>javax.jdo.option.ConnectionPassword</name>
+<value>root</value>
+</property>
+</configuration>
+cp mysql-connector-java-5.1.25-bin.jar /home/mycluster/apache-hive-0.13.1-bin/lib/
+5. 配置环境变量。
+vi /home/hadoop/.bash_profile
+export HIVE_HOME=/home/hadoop/hive-0.9.0
+export PATH=$HIVE_HOME/bin:$PATH
+source /home/hadoop/.bash_profile
+
+b) 启动与测试
+(几种启动方式，暂缺)
+
+5.   安装Sqoop
+a) 安装与配置
+
+1. 安装tar.gz
+tar -xvf sqoop-1.4.5.bin__hadoop-2.5.0.tar.gz 
+ln -s sqoop-1.4.5.bin__hadoop-2.5.0 sqoop
+export SQOOP_HOME=/home/mycluster/sqoop
+export PATH=$SQOOP_HOME/bin:$PATH
+
+2. 添加jar
+根据需要，添加mysql connector、oracle connector
+scp mysql-connector-java-5.1.25-bin.jar mycluster@mycluster11:/home/mycluster/sqoop/lib
+scp ojdbc14.jar mycluster@mycluster11:/home/mycluster/sqoop/lib
+
+3. 配置文件
+cd /home/mycluster/sqoop/conf
+cp sqoop-env-template.sh sqoop-env.sh
+
+vi sqoop-env.sh
+export HADOOP_COMMON_HOME=/home/mycluster/hadoop-2.5.0
+export HADOOP_MAPRED_HOME=/home/mycluster/hadoop-2.5.0/share/hadoop/mapreduce
+export HIVE_HOME=/home/mycluster/apache-hive-0.13.1-bin
+b) 启动与测试
+sqoop list-databases --connect jdbc:mysql://localhost:3306/ --username root --password root
+
+6.  安装ZooKeeper3.4.6
+a) 安装与配置
+1. 安装与配置
+tar -zxvf zookeeper-3.4.6.tar.gz 
+mkdir /home/mycluster/zookeeper-3.4.6/zookeeperdir/logs
+cp zookeeper-3.4.6/conf/zoo_sample.cfg zookeeper-3.4.6/conf/zoo.cfg
+vi zookeeper-3.4.6/conf/zoo.cfg
+tickTime=2000
+initLimit=10
+syncLimit=5
+dataDir=/home/mycluster/zookeeper-3.4.6/zookeeperdir/zookeeper-data
+dataLogDir=/home/mycluster/zookeeper-3.4.6/zookeeperdir/logs
+clientPort=2181
+server.1=mycluster1:2888:3888
+server.2=mycluster3:2888:3888
+server.3=mycluster4:2888:3888
+vi .bashrc
+export ZOOKEEPER_HOME=/home/mycluster/zookeeper-3.4.6
+export PATH=$ZOOKEEPER_HOME/bin:$PATH
+
+2. 复制ZK目录到各主机。
+scp -r /home/mycluster/zookeeper-3.4.6 mycluster@mycluster3:/home/mycluster
+scp -r /home/mycluster/zookeeper-3.4.6 mycluster@mycluster4:/home/mycluster
+
+3. 设置myid
+[mycluster@mycluster1 ~]$ echo "1" > /home/mycluster/zookeeper-3.4.6/zookeeperdir/zookeeper-data/myid
+[mycluster@mycluster3 ~]$ echo "2" > /home/mycluster/zookeeper-3.4.6/zookeeperdir/zookeeper-data/myid
+[mycluster@mycluster4 ~]$ echo "3" > /home/mycluster/zookeeper-3.4.6/zookeeperdir/zookeeper-data/myid
+
+b) 启动与测试
+1. 登录各机器启动ZK。
+[mycluster@mycluster1 ~]$ zkServer.sh start
+[mycluster@mycluster3 ~]$ zkServer.sh start
+[mycluster@mycluster4 ~]$ zkServer.sh start
+
+2. 查看启动状态。
+由于ZooKeeper集群启动的时候，每个结点都试图去连接集群中的其它结点，先启动的肯定连不上后面还没启动的，所以日志前面部分的连接异常是可以忽略的。通过后面部分可以看到，集群在选出一个Leader后，最后稳定了。
+[mycluster@mycluster1 ~]$ zkServer.sh status
+JMX enabled by default
+Using config: /home/mycluster/zookeeper-3.4.6/bin/../conf/zoo.cfg
+Mode: follower
+[mycluster@mycluster3 ~]$ zkServer.sh status
+JMX enabled by default
+Using config: /home/mycluster/zookeeper-3.4.6/bin/../conf/zoo.cfg
+Mode: leader
+[mycluster@mycluster4 ~]$ zkServer.sh status
+JMX enabled by default
+Using config: /home/mycluster/zookeeper-3.4.6/bin/../conf/zoo.cfg
+Mode: follower
+
+3. 客户端测试。
+[mycluster@mycluster1 ~]$ zkCli.sh -server mycluster1:2181
+[zk: mycluster1:2181(CONNECTED) 0] ls /
+[zookeeper]
+
+二、zookeeper安装
+用户为hadoop，安装目录为/opt下面
+上传安装文件到/opt下面
+root用户解压
+[root@master opt]$ tar -zxvf zookeeper-3.4.6.tar.gz
+修改用户及属组
+[root@master opt]# chown -R hadoop:hadoop zookeeper-3.4.6
+创建数据文件夹并修改属组
+[root@master zookeeper-3.4.6]# mkdir /data/zookeeper
+[root@master zookeeper-3.4.6]# chown -R hadoop:hadoop /data/zookeeper
+[root@master zookeeper-3.4.6]# ls -ll /data
+总用量 0
+drwxr-xr-x 5 mysql mysql 153 12月 23 15:28 mysql
+drwxr-xr-x 2 hadoop hadoop 6 12月 24 11:06 zookeeper
+[root@master zookeeper-3.4.6]#
+切换用户并修改文件zoo.cfg
+[root@master zookeeper-3.4.6]# su hadoop
+[hadoop@master zookeeper-3.4.6]$ cd conf/
+[hadoop@master conf]$ ls
+configuration.xsl log4j.properties zoo_sample.cfg
+[hadoop@master conf]$ mv zoo_sample.cfg zoo.cfg
+[hadoop@master conf]$ vim zoo.cfg 
+dataDir=/data/zookeeper #修改数据文件夹自定
+server.1=master:2888:3888 #添加服务器
+server.2=slave1:2888:3888 #添加服务器
+server.3=slave2:2888:3888 #添加服务器
+:wq #保存并退出
+// server.X=A:B:C
+其中X是一个数字,表示这是第几号server.
+A是该server所在的IP地址.
+B配置该server和集群中的leader交换消息所使用的端口.
+C配置选举leader时所使用的端口
+进入数据文件夹创建myid为1
+[hadoop@master conf]$ cd /data/zookeeper/
+[hadoop@master zookeeper]$ vim myid
+[hadoop@master zookeeper]$
+.将配置到的zookeeper拷贝到其他电脑（slave1,slave2）上
+[hadoop@master opt]$ scp -rzookeeper-3.4.6 root@slave1:/opt/
+修改属组
+[root@master opt]# chown -R hadoop:hadoop zookeeper-3.4.6
+配置环境变量
+[hadoop@slave1 zookeeper]$ su
+密码：
+[root@slave1 zookeeper]# vim /etc/profile
+[root@slave1 zookeeper]# . /etc/profile
+export ZOOKEEPER_HOME=/opt/zookeeper-3.4.6
+export PATH=$PATH:$ZOOKEEPER_HOME/bin
+启动，在三台机器上执行
+[hadoop@slave2 zookeeper-3.4.6]$ bin/zkServer.sh start
+判断是否启动成功
+[hadoop@slave2 zookeeper-3.4.6]$ jps
+19358 QuorumPeerMain
+或者查看进程
+[hadoop@slave2 zookeeper-3.4.6]$ ps -aux | grep 'zookeeper' #有信息则启动成功
+最好查看日志
+[hadoop@slave2 zookeeper-3.4.6]$ tail -f -n 500 zookeeper.out #查看是否报错
+关闭
+[hadoop@slave2 zookeeper-3.4.6]$ bin/zkServer.sh stop
+
+三、修改hadoop配置
+1、修改core-site.xml
+[hadoop@slave2 hadoop]$ vim core-site.xml
+添加
+<!--指定zookeeper地址-->
+<property>
+<name>ha.zookeeper.quorum</name>
+<value>master:2181,slave1:2181,slave2:2181</value>
+</property>
+
+四、安装Hbase
+下载解压
+[root@master opt]# tar -zxvf hbase-0.99.2-bin.tar.gz
+修改属组
+[root@master opt]# chown -R hadoop:hadoop hbase-0.99.2
+修改hbase-env.sh
+[root@master opt]# su hadoop
+[hadoop@master opt]$ cd hbase-0.99.2/
+[hadoop@master hbase-0.99.2]$ cd conf
+[hadoop@master conf]$ ls
+hadoop-metrics2-hbase.properties hbase-env.cmd hbase-env.sh hbase-policy.xml hbase-site.xml log4j.properties regionservers
+[hadoop@master conf]$
+[hadoop@master conf]$ vim hbase-env.sh
+修改
+export JAVA_HOME=/usr/java/jdk1.7.0_71 #视安装路径耳钉
+export HBASE_MANAGES_ZK=false
+修改vim hbase-site.xml
+[hadoop@master conf]$ vim hbase-site.xml
+<property>
+<name>hbase.rootdir</name>
+<value>hdfs://master:9000/hbase</value>
+</property>
+<property>
+<name>hbase.cluster.distributed</name>
+<value>true</value>
+</property>
+<property>
+<name>hbase.master</name>
+<value>master:60000</value>
+</property>
+<property>
+<name>hbase.master.port</name>
+<value>60000</value>
+<description>The port master should bind to.</description>
+</property>
+<property>
+<name>hbase.zookeeper.quorum</name>
+<value>master,slave1,slave2</value>
+</property>
+<property>
+<name>hbase.zookeeper.property.dataDir</name>
+<value>/data/zookeeper</value>
+</property>
+修改regionservers
+[hadoop@master conf]$ vim regionservers
+slave1
+slave2
+复制到另两台机器slave1与slave2
+[hadoop@master opt]$ scp -r hbase-0.99.2 root@slave1:/opt/
+修改属组
+[root@slave1 opt]# chown -R hadoop:hadoop hbase-0.99.2/
+启动master上的hbase
+[hadoop@master bin]$ bin/start-hbase.sh
+jps查看
+[hadoop@master logs]$ jps
+14594 HMaster
+[hadoop@slave1 opt]$ jps
+14945 Jps
+8260 NodeManager
+8118 DataNode
+13877 QuorumPeerMain
+14873 HRegionServer
+[hadoop@slave1 opt]$
+进入hbase shell
+[hadoop@master hbase-0.99.2]$ bin/hbase shell
+关闭
+[hadoop@master bin]$ bin/stop-hbase.sh
+
+HADOOP设计方面，有以下的一些大的方面的改进：服务生命周期管理模式、事件驱动模式、状态驱动模式
+一个服务的生命大概有4个状态：NOTINITED、INITED、STARTED、STOPPED。对应一些基本的操作，如：init start stop等。
+服务的状态变化会触发一些变化。需要观察者模式。
+有组合服务的概念，因为我需要一个循环同时启动多个服。可以使用Composite模式
+
+spark
+(1)、本地模式
+# ./run-example org.apache.spark.examples.SparkPi local
+
+(2)、普通集群模式
+# ./run-example org.apache.spark.examples.SparkPi spark://namenode1:7077
+# ./run-example org.apache.spark.examples.SparkLR spark://namenode1:7077
+# ./run-example org.apache.spark.examples.SparkKMeans spark://namenode1:7077 file:/usr/local/spark/kmeans_data.txt 2 1
+
+(3)、结合HDFS的集群模式
+# hadoop fs -put README.md .
+# MASTER=spark://namenode1:7077 ./spark-shell
+scala> val file = sc.textFile("hdfs://namenode1:9000/user/root/README.md")
+scala> val count = file.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_+_)
+scala> count.collect()
+scala> :quit
+
+(4)、基于YARN模式
+# SPARK_JAR=./assembly/target/scala-2.9.3/spark-assembly_2.9.3-0.8.1-incubating-hadoop2.2.0.jar \
+./spark-class org.apache.spark.deploy.yarn.Client \
+--jar examples/target/scala-2.9.3/spark-examples_2.9.3-assembly-0.8.1-incubating.jar \
+--class org.apache.spark.examples.SparkPi \
+--args yarn-standalone \
+--num-workers 3 \
+--master-memory 4g \
+--worker-memory 2g \
+--worker-cores 1
+
+执行结果：
+/usr/local/hadoop/logs/userlogs/application_*/container*_000001/stdout
+
+(5)、其他一些样例程序
+examples/src/main/scala/org/apache/spark/examples/
+
+
+(6)、问题定位【数据节点上的日志】
+/data/hadoop/storage/tmp/nodemanager/logs
+
+(7)、一些优化
+# vim /usr/local/spark/conf/spark-env.sh
+export SPARK_WORKER_MEMORY=16g  【根据内存大小进行实际配置】
+
+
+1. 启动Hadoop
+cd /home/brian/usr/hadoop/hadoop-1.1.2
+#格式化NameNode    ./bin/hadoop namenode -format
+#启动集群    ./bin/start-al
+#将README.txt文件复制到HDFS以供测试
+./bin/hadoop fs -put README.txt readme.txt
+
+1 Spark本地
+1.1 jar方式执行
+	# spark/bin/run-example org.apache.spark.examples.SparkPi 2 或 spark/bin/run-example SparkPi 2 local
+	# spark/bin/run-example org.apache.spark.examples.SparkLR 2
+1.2 shell方式启动和执行
+	单线程 MASTER=local spark/bin/spark-shell 或 spark/bin/spark-shell --master local
+	多线程（4） MASTER=local[4] spark/bin/spark-shell 或 spark/bin/spark-shell --master local[4]
+
+2 standalone spark集群
+2.1 jar方式执行（*）
+# spark/bin/run-example org.apache.spark.examples.SparkPi 2 spark://192.168.59.171:7077 
+# spark/bin/run-example org.apache.spark.examples.SparkLR 2
+# spark/bin/run-example org.apache.spark.examples.SparkKMeans spark://namenode1:7077 file:/usr/local/spark/data/kmeans_data.txt 2 1
+
+2.2 shell方式启动和执行
+2.2.1 启动
+2.2.1.1 master和slave分开启动
+	启动master: spark/sbin/start-master.sh
+	启动worker: spark/sbin/start-slave.sh 1 spark://192.168.59.171:7077 --webui-port 8093
+2.2.1.2 Spark集群整体启动 spark/sbin/start-all.sh
+
+2.2.2 关闭：spark/sbin/stop-all.sh
+
+2.2.3 执行
+MASTER=spark://192.168.59.171:7077 spark/bin/spark-shell
+scala> val file = sc.textFile("hdfs://namenode1:9000/user/root/README.md")
+scala> val count = file.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_+_)
+scala> count.collect()
+scala> :q
+
+3 基于YARN模式的执行
+# SPARK_JAR=assembly/target/scala-2.10/spark-assembly_2.10-0.9.0-incubating-hadoop2.2.0.jar \
+bin/spark-class org.apache.spark.deploy.yarn.Client \
+--jar examples/target/scala-2.10/spark-examples_2.10-assembly-0.9.0-incubating.jar \
+--class org.apache.spark.examples.SparkPi \
+--args yarn-standalone \
+--num-workers 3 \
+--master-memory 4g \
+--worker-memory 2g \
+--worker-cores 1
+
+4 spark实例
+4.1
+val file = sc.textFile('hdfs://10.32.21.165:8020/1639.sta') 
+file.map(_.size).reduce(_+_)         #这是计算文件中的字符个数
+val count = file.flatMap(line => line.split(' ')).map(word => (word, 1)).reduceByKey(_+_) 
+count.saveAsTextFile('hdfs://10.32.21.165:8020/spark') 
+
+问题1：reduce task数目不合适
+解决方式：
+ 需根据实际情况调节默认配置，调整方式是修改参数spark.default.parallelism。通常，reduce数目设置为core数目的2到3倍。数量太大，造成很多小任务，增加启动任务的开销；数目太少，任务运行缓慢。
+ 
+问题2：shuffle磁盘IO时间长
+解决方式：
+ 设置spark.local.dir为多个磁盘，并设置磁盘为IO速度快的磁盘，通过增加IO来优化shuffle性能；
+问题3：map|reduce数量大，造成shuffle小文件数目多
+ 
+解决方式：
+ 默认情况下shuffle文件数目为map tasks * reduce tasks
+ 通过设置spark.shuffle.consolidateFiles为true，来合并shuffle中间文件，此时文件数为reduce tasks数目；
+ 
+问题4：序列化时间长、结果大
+解决方式：
+ Spark默认使.用JDK.自带的ObjectOutputStream，这种方式产生的结果大、CPU处理时间长，可以通过设置spark.serializer为org.apache.spark.serializer.KryoSerializer。
+ 另外如果结果已经很大，可以使用广播变量；
+ 
+问题5：单条记录消耗大
+解决方式：
+ 使用mapPartition替换map，mapPartition是对每个Partition进行计算，而map是对partition中的每条记录进行计算；
+ 
+问题6 : collect输出大量结果时速度慢
+解决方式：
+ collect源码中是把所有的结果以一个Array的方式放在内存中，可以直接输出到分布式?文件系统，然后查看文件系统中的内容；
+ 
+问题7: 任务执行速度倾斜
+解决方式：
+ 如果是数据倾斜，一般是partition key取的不好，可以考虑其它的并行处理方式 ，并在中间加上aggregation操作；
+ 如果是Worker倾斜，例如在某些worker上的executor执行缓慢，可以通过设置spark.speculation=true 把那些持续慢的节点去掉；
+ 
+问题9: 通过多步骤的RDD操作后有很多空任务或者小任务产生
+解决方式： 使用coalesce或repartition去减少RDD中partition数量；
+ 
+问题10：Spark Streaming吞吐量不高
+解决方式：可以设置spark.streaming.concurrentJobs
+ 
+
+export SCALA_HOME=/export1/spark/scala-2.10.3
+export HADOOP_HOME=/home/q/hadoop-2.2.0
+export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop
+
+SPARK_MASTER_IP=192.168.24.72
+SPARK_MASTER_PORT=7077
+SPARK_MASTER_WEBUI_PORT=8080
+SPARK_WORKER_INSTANCES=3
+SPARK_WORKER_PORT=8091
+SPARK_WORKER_DIR=/export1/spark/worker

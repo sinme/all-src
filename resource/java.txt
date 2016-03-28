@@ -1,0 +1,600 @@
+System.getProperty(String properyName) 方法可以获取JAVA启动的-D的参数
+main(String args[]) 的args则是JAVA启动主类后面的命令
+
+1、java文件中获得路径
+System.out.println(Test.class.getResource("/").getPath()); //获取classpath路径/H:/WorkProjects/YC_EmpSys/bin/
+System.out.println(Test.class.getResource("").getPath()); //获得当前类所在路径/H:/WorkProjects/YC_EmpSys/bin/test/
+System.out.println(this.getClass().getResource("").getPath()); //获得当前类所在路径/H:/WorkProjects/YC_EmpSys/bin/test/
+System.out.println(Test.class.getClassLoader().getResource("")); //获取classpath的url路径file:/H:/WorkProjects/YC_EmpSys/bin/
+System.out.println(Thread.currentThread().getContextClassLoader().getResource("")); //获取classpath的url路径file:/H:/WorkProjects/YC_EmpSys/bin/
+System.out.println(ClassLoader.getSystemResource("")); //获取classpath的url路径file:/H:/WorkProjects/YC_EmpSys/bin/
+System.out.println(System.getProperty("user.dir")); //获得项目根路径H:\WorkProjects\YC_EmpSys
+System.out.println(System.getProperty("java.class.path")); //得到类和包的路径H:\WorkProjects\YC_EmpSys\bin;H:\WorkProjects\YC_EmpSys\lib\commons-httpclient-3.1.jar;
+2、JSP中获得当前应用的相对路径和绝对路径
+根目录所对应的绝对路径:request.getRequestURI()
+文件的绝对路径 　:application.getRealPath(request.getRequestURI());
+当前web应用的绝对路径 :application.getRealPath("/");
+取得请求文件的上层目录:new File(application.getRealPath(request.getRequestURI())).getParent()
+3、Servlet中获得当前应用的相对路径和绝对路径
+根目录所对应的绝对路径:request.getServletPath();
+文件的绝对路径 :request.getSession().getServletContext().getRealPath(request.getRequestURI())
+当前web应用的绝对路径 :servletConfig.getServletContext().getRealPath("/");
+ServletContext对象获得几种方式：
+javax.servlet.http.HttpSession.getServletContext()
+javax.servlet.jsp.PageContext.getServletContext()
+javax.servlet.ServletConfig.getServletContext()
+
+类加载器
+启动（Bootstrap）类加载器：引导类装入器是用本地代码实现的类装入器，它负责将<Java_Runtime_Home>/lib下面的核心类库或-Xbootclasspath选项指定的jar包加载到内存中。由于引导类加载器涉及到虚拟机本地实现细节，开发者无法直接获取到启动类加载器的引用，所以不允许直接通过引用进行操作。
+扩展（Extension）类加载器：扩展类加载器是由Sun的ExtClassLoader（sun.misc.Launcher$ExtClassLoader）实现的。它负责将< Java_Runtime_Home>/lib/ext或者由系统变量-Djava.ext.dir指定位置中的类库加载到内存中。开发者可以直接使用标准扩展类加载器。
+系统（System）类加载器：系统类加载器是由 Sun的 AppClassLoader（sun.misc.Launcher$AppClassLoader）实现的。它负责将系统类路径java -classpath或-Djava.class.path变量所指的目录下的类库加载到内存中。开发者可以直接使用系统类加载器。
+双亲委派机制，就是某个特定的类加载器在接到加载类的请求时，首先将加载任务委托给父类加载器，依次递归，如果父类加载器可以完成类加载任务，就成功返回；只有父类加载器无法完成此加载任务时，才自己去加载。
+系统类加载器的父类加载器是标准扩展类加载器，标准扩展类加载器的父类加载器是启动类加载器
+JVM中一个类用其全名和一个加载类ClassLoader的实例作为唯一标识，不同类加载器加载的类将被置于不同的命名空间。
+Class.forName(String name)默认会使用调用类的类加载器来进行类加载；
+在不指定父类加载器的情况下，默认采用系统类加载器；
+用户自定义的类加载器将父类加载器强制设置为null，那么会自动将启动类加载器设置为当前用户自定义类加载器的父类加载器
+运行时判断系统类加载器能加载哪些路径下的类：
+1.调用ClassLoader.getSystemClassLoader()或者其他方式获取到系统类加载器（系统类加载器和扩展类加载器本身都派生自URLClassLoader），调用URLClassLoader中的getURLs()方法可以获取到。
+2.获取系统属性java.class.path来查看当前类路径上的条目信息 ：System.getProperty("java.class.path")。
+运行时判断标准扩展类加载器能加载哪些路径下的类：
+URL[]?extURLs?=?((URLClassLoader)?ClassLoader.getSystemClassLoader().getParent()).getURLs();?? ????????????for?(int?i?=?0;?i?<?extURLs.length;?i++)?{?? ????????????????System.out.println(extURLs[i]);?? ????????????}
+代理委派模式：类加载过程有2部分：启动类加载工作和完成类加载工作，且2部分工作的加载器有可能不同。启动类加载过程是调用loadClass(初始加载器initiating loader)；完成类加载工作是调用defineClass(定义加载器defining loader)。
+Java虚拟机用类定义加载器来判断两个类是否相同，因此启动加载器的加载过程并不重要。一个类的定义加载器是它引用的其它类的初始加载器。
+方法 loadClass()抛出的是 java.lang.ClassNotFoundException异常；方法 defineClass()抛出的是 java.lang.NoClassDefFoundError异常。
+因此，为了保证类加载器都正确实现代理模式，在开发自己的类加载器时，最好不要覆写 loadClass()方法，而是覆写 findClass()方法。
+服务提供者接口（Service Provider Interface，SPI）以第三者方式提供接口，它实现的 Java 类一般是由系统类加载器来加载的，但常规加载器的代理模式不能实现SPI的加载，所以引入线程上下文类加载器contextClassLoader
+大部分java application服务器(jboss, tomcat..)也是采用contextClassLoader来处理web服务。还有一些采用hot swap(热插拔)特性的框架，也使用了线程上下文类加载器
+一般来说，上下文类加载器要比当前类加载器更适合于框架编程，而当前类加载器则更适合于业务逻辑编程。
+OSGi是 Java 上的动态模块系统。每个模块都有对应的一个类加载器。它负责加载自己模块包含的 Java 包和类。当它需要加载 Java 核心库的类时（以 java开头的包和类），它会代理给父类加载器（通常是启动类加载器）来完成。当它需要加载所导入的 Java 类时，它会代理给导出此 Java 类的模块来完成加载。
+这种类加载器结构，使得一个类的不同版本可以共存在 Java 虚拟机中，带来了很大的灵活性,不过也会给开发人员带来一些麻烦
+
+infomix锁定位(简例:onstat -k | grep HDR+X;onstat -u |grep 700000070402c18;onstat -g ses 292817;)
+1.获取锁持有的内存地址:onstat -k | grep HDR+X/HDR/X（HDR+X 为排他锁;HDR 头;X 互斥）
+owner字段 为正持有锁的线程的共享内存地址(例如:700000070402c18);
+2.通过内存地址获取SESSID: onstat -u |grep 700000070402c18;
+sessid字段 为会话标识符编号(例如:292817)；
+3.通过SESSID获取定位SQL: $ onstat -g ses 292817;
+Current SQL statement下为异常sql；
+
+JAVA内存分析(简例:topas;ps -mp 29622302 -o THREAD,tid,time|sort -rn;sudo -u root jstack -F/-m 29622302|grep 7fd09d7 -A 10;)
+1.topas获取占用资源的进程;
+2.获取进程下占用资源的线程：ps -mp 29622302 -o THREAD,tid,time | sort -rn (29622302为进程ID)
+  TID字段 为线程ID(例如:134023639)；
+  获取线程id对应的16进制内存地址：printf "%x\n" 134023639
+3.调用内存分析工具(jps,jstack,jmap等)分析代码:jstack -l 7fd09d7 > deadlock.jstack (7fd09d7为内存地址)
+  结果即为JAVA代码
+
+weblogic:
+1.设置环境变量：set JAVA_HOME=D:\jdk1.6.0_35
+set MW_HOME=D:\wls1036_dev
+2.运行参数脚本和创建环境：
+cd D:\wls1036_dev
+configure.cmd
+%MW_HOME%\wlserver\server\bin\setWLSEnv.cmd
+3.创建DOMAIN目录：mkdir D:\wls1036_dev\domains\mainDomain
+cd D:\wls1036_dev\domains\mainDomain
+4.启动：%JAVA_HOME%\bin\java.exe -Xmx1024m -XX:MaxPermSize=128m weblogic.Server
+5.访问并配置：http://localhost:7001/console
+
+创建型模式，共五种：工厂方法模式、抽象工厂模式、单例模式、建造者模式、原型模式。
+结构型模式，共七种：适配器模式、装饰器模式、代理模式、外观模式、桥接模式、组合模式、享元模式。
+行为型模式，共十一种：策略模式、模板方法模式、观察者模式、迭代子模式、责任链模式、命令模式、备忘录模式、状态模式、访问者模式、中介者模式、解释器模式。
+
+javaw.exe -Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=y|n,address=[host:]<port_number> -Dfile.encoding=<encoding> -classpath <classpath> <main_class>  
+
+UML的九种图：用例图，类图，对象图，状态图，活动图，序列图，协作图，构件图，部署图。外加包图。
+
+JAVA序列化 使用ObjectOutputStream来持久化对象
+1.使用默认机制，在序列化对象时，不仅会序列化当前对象本身，还会对该对象引用的其它对象也进行序列化，同样地，这些其它对象引用的另外对象也将被序列化
+2.当某个字段被声明为transient后，默认序列化机制就会忽略该字段
+3.再次序列化？方法之一就是在Person类中添加两个方法：writeObject()与readObject().
+4.另一个序列化接口--Externalizable，使用该接口之后，之前基于Serializable接口的序列化机制就将失效,序列化的细节需要由程序员去完成.
+	如果writeExternal()与readExternal()方法未作任何处理，那么该序列化行为将不会保存/读取任何一个字段
+5.无论是实现Serializable接口，或是Externalizable接口，当从I/O流中读取对象时，readResolve()方法都会被调用到。实际上就是用readResolve()中返回的对象直接替换在反序列化过程中创建的对象。
+
+内存
+jmap -histo 8424  查看内存里对象产生情况
+jstack 8424 查看堆栈情况，分析代码
+jstat -gcutil 8424 1000 5 查看内存各区分布及GC情况
+
+一、Java内存的构成
+    先上一个官方java document里的图：
+    整块区域分为Young Generation、Tenured Generation、Permanent Generation。
+		详细解释一下Young区：
+    Young区又分为：Eden、Survivor Space。
+    Survivor Space又分为 To Survivor、 From Survivor
+    
+Java内存分为 堆内存（heap）和 Permanent区。
+1、Java堆内存（heap）：
+    --是 JVM 用于分配 Java 对象的内存，包含活动对象和不可用对象 
+    --堆大小通常是在服务器启动时使用 java 命令中的 –Xms(最小) –Xmx（最大）标志来定义。 
+2、Permanent区：
+    --指内存的永久保存区域
+    --是Sun JDK和HP JDK用来加载类(class)和Meta信息的专门的内存区
+    --这个区域不归属Java堆内存(heap)范围
+    --Class在被Loader时就会被放到此，如果Java应用很大，例如类(class)很多，那么建议增大这个区域的大小来满足加载这些类的内存需求
+    --通过–XX:PermSize=***M –XX:MaxPermSize=***M调整
+
+这里还有一个本地内存的概念：
+·本地内存(native memory)： 
+    --是 JVM 用于其内部操作的本地内存（非Java内存） 
+    --JNI 代码和第三方本地模块（例如，本地 JDBC 驱动程序）也使用本地内存 
+    --最大本地内存大小取决于以下因素：操作系统进程内存大小限制、已经指定用于 Java 堆的内存
+
+也就是说，整个物理机的内存可以说由以下部分构成：
+物理内存 = Java 内存 ＋ 本地内存 ＋ 操作系统保留的内存
+
+
+二、垃圾回收（Garbage Collection，GC）
+
+1、为什么要垃圾回收
+    --JVM自动检测和释放不再使用的内存。 
+    --Java 运行时JVM会执行 GC，这样程序员不再需要显式释放对象。 
+
+2、垃圾回收（GC）的分类
+    --Minor GC
+    --Full GC
+
+3、垃圾回收（GC）的产生过程
+     1）新生成的对象在Eden区完成内存分配
+     2）当Eden区满了，再创建对象，会因为申请不到空间，触发minorGC，进行young(eden+1survivor)区的垃圾回收。（为什么是eden+1survivor：两个survivor中始终有一个survivor是空的，空的那个被标记成To Survivor）
+     3）minorGC时，Eden不能被回收的对象被放入到空的survivor（也就是放到To Survivor，同时Eden肯定会被清空），另一个survivor（From Survivor）里不能被GC回收的对象也会被放入这个survivor（To Survivor），始终保证一个survivor是空的。（MinorGC完成之后，To Survivor 和 From Survivor的标记互换）
+     4）当做第3步的时候，如果发现存放对象的那个survivor满了，则这些对象被copy到old区，或者survivor区没有满，但是有些对象已经足够Old（通过XX:MaxTenuringThreshold参数来设置），也被放入Old区
+     5）当Old区被放满的之后，进行完整的垃圾回收，即 Full GC
+     6）Full GC时，整理的是Old Generation里的对象，把存活的对象放入到Permanent Generation里。
+
+4、垃圾回收的回收器
+  --串行（–XX:+UseSerialGC ）
+    Out of Box算法，年轻代串行复制，年老代串行标记整理，主要用于桌面应用
+
+  --并行（–XX:+UseParallelGC ）
+     年轻代暂停应用程序，多个垃圾收集线程并行的复制收集，年老代暂停应用程序，与串行收集器一样，单垃圾收集线程标记整理。JDK 6.0启用该算法后，默认启用了-XX:+UseParallelOldGC，性能大为提高
+
+  --并发(Concurrent Low Pause Collector)( –XX:+UseConcMarkSweepGC )
+     启用该参数，默认启用了-XX:+UseParNewGC；简单的说，并发是指用户线程与垃圾收集线程并发，程序在继续运行，而垃圾收集程序运行于其他CPU上。
+
+
+三、Java内存的调优参数
+-Xmx1024m：
+    设置JVM最大可用内存为1024M。
+
+-Xms1024m：
+    设置JVM促使内存为1024M。此值可以设置与-Xmx相同，以避免每次垃圾回收完成后JVM重新分配内存。
+
+-Xmn512m：
+    设置年轻代大小为512M。（持久代一般固定大小为64m，所以增大年轻代后，将会减小年老代大小。此值对系统性能影响较大，Sun官方推荐配置为整个堆的3/8。）
+
+-Xss128k：
+    设置每个线程的堆栈大小。这个值可以根据应用的线程所需内存大小进行调整。在相同物理内存下，减小这个值能生成更多的线程。但是操作系统对一个进程内的线程数还是有限制的，不能无限生成。
+
+-XX:NewRatio=4
+    设置年轻代（包括Eden和两个Survivor区）与年老代的比值（总的大小是Xms的值）。设置为4，则年轻代与年老代所占比值为1：4，年轻代占整个堆栈的1/5。
+    举个例子，-Xms 设置为 1024m，-Xmx 也设置为 1024m的情况下：
+      ·年轻代 = 1024M/5 = 204.8M
+      ·年老代 = 1024M/5*4 = 819.2M
+    如果-Xms和-Xmx的值设置的不一样，可以添加 -XX:MinHeapFreeRatio=<minimum> 和 -XX:MaxHeapFreeRatio=<maximum> 参数，使内存的大小能够在 大于 -Xms 和 小于 -Xmx 之间的范围内自动调整，所以内存中会有Virtual的空间（我是这样理解的，不是太清楚，这里需要大家指教）
+英文原文如下：http://java.sun.com/docs/hotspot/gc1.4.2/#3. Sizing the Generations|outline
+    By default, the virtual machine grows or shrinks the heap at each collection to try to keep the proportion of free space to live objects at each collection within a specific range. This target range is set as a percentage by the parameters -XX:MinHeapFreeRatio=<minimum> and -XX:MaxHeapFreeRatio=<maximum>, and the total size is bounded below by -Xms and above by -Xmx .
+
+-XX:SurvivorRatio=4：
+    设置年轻代中Eden区与Survivor区的大小比值。设置为4，则两个Survivor区与一个Eden区的比值为2:4，一个Survivor区占整个年轻代的1/6
+
+-XX:MaxPermSize=16m:
+    设置持久代大小为16m。
+
+-XX:MaxTenuringThreshold=0：
+    设置垃圾最大年龄。如果设置为0的话，则年轻代对象不经过Survivor区，直接进入年老代。对于年老代比较多的应用，可以提高效率。如果将此值设置为一个较大值，则年轻代对象会在Survivor区进行多次复制，这样可以增加对象再年轻代的存活时间，增加在年轻代即被回收的概论。
+    
+四、内存分配中会出现的错误
+关于内存最常见的错误应该是这两个：
+  -- 内存溢出 Out Of Memory（OOM）
+  -- 内存泄露 Memory Leak （ML）
+ 
+1、内存溢出
+    内存溢出发生在这种状况下：Java内存完成Minor GC 之后想要把还存活的对象放到 Old区 里，但是这时Old区 已经满了，同时 Permanent区也已经放不下存活的对象。这时就会产生 OOM 错误。
+
+2、内存泄露
+    在Java中，内存泄漏就是存在一些被分配的对象，这些对象有下面两个特点，首先，这些对象是有被引用的，即在有向树形图中，存在树枝通路可以与其相连；其次，这些对象是无用的，即程序以后不会再使用这些对象。如果对象满足这两个条件，这些对象就可以判定为Java中的内存泄漏，这些对象不会被GC所回收，然而它却占用内存。
+    找到一个例子：
+    “这里引用一个常看到的例子，在下面的代码中，循环申请Object对象，并将所申请的对象放入一个Vector中，如果仅仅释放对象本身，但因为Vector仍然引用该对象，所以这个对象对GC来说是不可回收的。因此，如果对象加入到Vector后，还必须从Vector中删除，最简单的方法就是将Vector对象设置为null。
+Vector v = new Vector(10);      
+for (int i = 1; i < 100; i++)      
+{      
+　Object o = new Object();      
+　v.add(o);      
+　o = null;      
+}//此时，所有的Object对象都没有被释放，因为变量v引用这些对象。     
+实际上这些对象已经是无用的，但还被引用，GC就无能为力了(事实上GC认为它还有用)，这一点是导致内存泄漏最重要的原因。”
+
+3、补充一个：PermGen space Error
+    因为 GC 不会在主程序运行期对PermGen space进行清理，所以如果应用中有很CLASS需要Load的话，就很可能出现PermGen space错误。
+    另外如果WEB APP下使用了大量的第三方jar, 其大小超过了 jvm 默认的大小那么也会产生此错误信息了。
+
+
+
+1、Java虚拟机运行时的数据区
+2、常用的内存区域调节参数
+
+-Xms：初始堆大小，默认为物理内存的1/64(<1GB)；默认(MinHeapFreeRatio参数可以调整)空余堆内存小于40%时，JVM就会增大堆直到-Xmx的最大限制
+
+-Xmx：最大堆大小，默认(MaxHeapFreeRatio参数可以调整)空余堆内存大于70%时，JVM会减少堆直到 -Xms的最小限制
+
+-Xmn：新生代的内存空间大小，注意：此处的大小是（eden+ 2 survivor space)。与jmap -heap中显示的New gen是不同的。整个堆大小=新生代大小 + 老生代大小 + 永久代大小。 
+在保证堆大小不变的情况下，增大新生代后,将会减小老生代大小。此值对系统性能影响较大,Sun官方推荐配置为整个堆的3/8。
+
+-XX:SurvivorRatio：新生代中Eden区域与Survivor区域的容量比值，默认值为8。两个Survivor区与一个Eden区的比值为2:8,一个Survivor区占整个年轻代的1/10。
+
+-Xss：每个线程的堆栈大小。JDK5.0以后每个线程堆栈大小为1M,以前每个线程堆栈大小为256K。应根据应用的线程所需内存大小进行适当调整。在相同物理内存下,减小这个值能生成更多的线程。但是操作系统对一个进程内的线程数还是有限制的，不能无限生成，经验值在3000~5000左右。一般小的应用， 如果栈不是很深， 应该是128k够用的，大的应用建议使用256k。这个选项对性能影响比较大，需要严格的测试。和threadstacksize选项解释很类似,官方文档似乎没有解释,在论坛中有这样一句话:"-Xss is translated in a VM flag named ThreadStackSize”一般设置这个值就可以了。
+
+-XX:PermSize：设置永久代(perm gen)初始值。默认值为物理内存的1/64。
+
+-XX:MaxPermSize：设置持久代最大值。物理内存的1/4。
+
+3、内存分配方法
+
+1）堆上分配   2）栈上分配  3）堆外分配（DirectByteBuffer或直接使用Unsafe.allocateMemory,但不推荐这种方式）
+
+4、监控方法
+
+1）系统程序运行时可通过jstat –gcutil来查看堆中各个内存区域的变化以及GC的工作状态； 
+2）启动时可添加-XX:+PrintGCDetails  –Xloggc:<file>输出到日志文件来查看GC的状况； 
+3）jmap –heap可用于查看各个内存空间的大小；
+
+5）断代法可用GC汇总
+一、新生代可用GC
+
+1）串行GC(Serial Copying)：client模式下默认GC方式，也可通过-XX:+UseSerialGC来强制指定；默认情况下 eden、s0、s1的大小通过-XX:SurvivorRatio来控制，默认为8，含义 
+为eden:s0的比例，启动后可通过jmap –heap [pid]来查看。
+
+      默认情况下，仅在TLAB或eden上分配，只有两种情况下会在老生代分配： 
+      1、需要分配的内存大小超过eden space大小； 
+      2、在配置了PretenureSizeThreshold的情况下，对象大小大于此值。
+
+      默认情况下，触发Minor GC时：
+      之前Minor GC晋级到old的平均大小 < 老生代的剩余空间 < eden+from Survivor的使用空间。当HandlePromotionFailure为true，则仅触发minor gc；如为false，则触发full GC。
+
+      默认情况下，新生代对象晋升到老生代的规则：
+
+     1、经历多次minor gc仍存活的对象，可通过以下参数来控制：以MaxTenuringThreshold值为准，默认为15。
+     2、to space放不下的，直接放入老生代；
+
+2）并行GC（ParNew）：CMS GC时默认采用，也可采用-XX:+UseParNewGC强制指定；垃圾回收的时候采用多线程的方式。
+
+3）并行回收GC(Parallel Scavenge)：server模式下默认的GC方式，也可采用-XX:+UseParallelGC强制指定；eden、s0、s1的大小可通过-XX:SurvivorRatio来控制，但默认情况下
+以-XX:InitialSurivivorRatio为准，此值默认为8，代表的为新生代大小 : s0，这点要特别注意。
+
+      默认情况下，当TLAB、eden上分配都失败时，判断需要分配的内存大小是否 >= eden space的一半大小，如是就直接在老生代上分配；
+
+      默认情况下的垃圾回收规则：
+
+      1、在回收前PS GC会先检测之前每次PS GC时，晋升到老生代的平均大小是否大于老生代的剩余空间，如大于则直接触发full GC；
+      2、在回收后，也会按照上面的规则进行检测。
+
+      默认情况下的新生代对象晋升到老生代的规则：
+     1、经历多次minor gc仍存活的对象，可通过以下参数来控制：AlwaysTenure，默认false，表示只要minor GC时存活，就晋升到老生代；NeverTenure，默认false，表示永不晋升到老生代；上面两个都没设置的情冴下，如UseAdaptiveSizePolicy，启动时以InitialTenuringThreshold值作为存活次数的阈值，在每次ps gc后会动态调整，如不使用UseAdaptiveSizePolicy，则以MaxTenuringThreshold为准。
+     2、to space放不下的，直接放入老生代。
+
+     在回收后，如UseAdaptiveSizePolicy，PS GC会根据运行状态动态调整eden、to以及TenuringThreshold的大小。如果不希望动态调整可设置-XX:-UseAdaptiveSizePolicy。如希望跟踪每次的变化情况，可在启劢参数上增加： PrintAdaptiveSizePolicy。
+
+二、老生代可用GC
+
+1、串行GC(Serial Copying)：client方式下默认GC方式，可通过-XX:+UseSerialGC强制指定。
+
+    触发机制汇总：
+   1）old gen空间不足；
+   2）perm gen空间不足；
+   3）minor gc时的悲观策略；
+   4）minor GC后在eden上分配内存仍然失败；
+   5）执行heap dump时；
+   6）外部调用System.gc，可通过-XX:+DisableExplicitGC来禁止。
+
+2、并行回收GC(Parallel Scavenge)： server模式下默认GC方式，可通过-XX:+UseParallelGC强制指定； 并行的线程数为当cpu core<=8 ? cpu core : 3+(cpu core*5)/8或通过-XX:ParallelGCThreads=x来强制指定。如ScavengeBeforeFullGC为true（默认值），则先执行minor GC。
+
+3、并行Compacting：可通过-XX:+UseParallelOldGC强制指定。
+
+4、并发CMS：可通过-XX:+UseConcMarkSweepGC来强制指定。并发的线程数默认为:( 并行GC线程数+3)/4，也可通过ParallelCMSThreads指定。
+
+    触发机制：
+    1、当老生代空间的使用到达一定比率时触发；
+
+     Hotspot V 1.6中默认为65%，可通过PrintCMSInitiationStatistics（此参数在V 1.5中不能用）来查看这个值到底是多少；可通过CMSInitiatingOccupancyFraction来强制指定，默认值并不是赋值在了这个值上，是根据如下公式计算出来的： ((100 - MinHeapFreeRatio) +(double)(CMSTriggerRatio * MinHeapFreeRatio) / 100.0)/ 100.0; 其中,MinHeapFreeRatio默认值： 40   CMSTriggerRatio默认值： 80。
+
+     2、当perm gen采用CMS收集且空间使用到一定比率时触发；
+
+     perm gen采用CMS收集需设置：-XX:+CMSClassUnloadingEnabled   Hotspot V 1.6中默认为65%；可通过CMSInitiatingPermOccupancyFraction来强制指定，同样，它是根据如下公式计算出来的：((100 - MinHeapFreeRatio) +(double)(CMSTriggerPermRatio* MinHeapFreeRatio) / 100.0)/ 100.0; 其中，MinHeapFreeRatio默认值： 40    CMSTriggerPermRatio默认值： 80。
+
+      3、Hotspot根据成本计算决定是否需要执行CMS GC；可通过-XX:+UseCMSInitiatingOccupancyOnly来去掉这个动态执行的策略。
+      4、外部调用了System.gc，且设置了ExplicitGCInvokesConcurrent；需要注意，在hotspot 6中，在这种情况下如应用同时使用了NIO，可能会出现bug。
+
+6、GC组合
+
+1）默认GC组合
+7、GC监测
+
+1）jstat –gcutil [pid] [intervel] [count]
+2）-verbose:gc // 可以辅助输出一些详细的GC信息；-XX:+PrintGCDetails // 输出GC详细信息；-XX:+PrintGCApplicationStoppedTime // 输出GC造成
+应用暂停的时间
+1）打印GC日志信息：-XX:+PrintGCDetails –XX:+PrintGCApplicationStoppedTime -Xloggc: {文件名}  -XX:+PrintGCTimeStamps
+-XX:+PrintGCDateStamps // GC发生的时间信息；-XX:+PrintHeapAtGC // 在GC前后输出堆中各个区域的大小；-Xloggc:[file] // 将GC信息输出到单独的文件中，建议都加上，这个消耗不大，而且对查问题和调优有很大的帮助。gc的日志拿下来后可使用GCLogViewer或gchisto进行分析。
+3）图形化的情况下可直接用jvisualvm进行分析。
+
+4）查看内存的消耗状况
+
+      （1）长期消耗，可以直接dump，然后MAT(内存分析工具)查看即可
+
+      （2）短期消耗，图形界面情况下，可使用jvisualvm的memory profiler或jprofiler。
+
+8、系统调优方法
+
+步骤：1、评估现状 2、设定目标 3、尝试调优 4、衡量调优 5、细微调整
+
+设定目标：
+
+1）降低Full GC的执行频率？
+2）降低Full GC的消耗时间？
+3）降低Full GC所造成的应用停顿时间？
+4）降低Minor GC执行频率？
+5）降低Minor GC消耗时间？
+例如某系统的GC调优目标：降低Full GC执行频率的同时，尽可能降低minor GC的执行频率、消耗时间以及GC对应用造成的停顿时间。
+
+衡量调优：
+
+1、衡量工具
+1）打印GC日志信息：-XX:+PrintGCDetails –XX:+PrintGCApplicationStoppedTime -Xloggc: {文件名}  -XX:+PrintGCTimeStamps
+2）jmap：（由于每个版本jvm的默认值可能会有改变，建议还是用jmap首先观察下目前每个代的内存大小、GC方式） ?
+3）运行状况监测工具：jstat、jvisualvm、sar 、gclogviewer
+
+2、应收集的信息
+1）minor gc的执行频率；full gc的执行频率，每次GC耗时多少？
+2）高峰期什么状况？
+3）minor gc回收的效果如何？survivor的消耗状况如何，每次有多少对象会进入老生代？
+4）full gc回收的效果如何？（简单的memory leak判断方法）
+5）系统的load、cpu消耗、qps or tps、响应时间
+
+QPS每秒查询率：是对一个特定的查询服务器在规定时间内所处理流量多少的衡量标准。在因特网上，作为域名服务器的机器性能经常用每秒查询率来衡量。对应fetches/sec，即每秒的响应请求数，也即是最大吞吐能力。
+TPS(Transaction Per Second)：每秒钟系统能够处理的交易或事务的数量。
+
+尝试调优：
+
+注意Java RMI的定时GC触发机制，可通过：-XX:+DisableExplicitGC来禁止或通过 -Dsun.rmi.dgc.server.gcInterval=3600000来控制触发的时间。
+
+1）降低Full GC执行频率 – 通常瓶颈
+老生代本身占用的内存空间就一直偏高，所以只要稍微放点对象到老生代，就full GC了；
+通常原因：系统缓存的东西太多；
+例如：使用oracle 10g驱动时preparedstatement cache太大；
+查找办法：现执行Dump然后再进行MAT分析；
+
+（1）Minor GC后总是有对象不断的进入老生代，导致老生代不断的满
+通常原因：Survivor太小了
+系统表现：系统响应太慢、请求量太大、每次请求分配的内存太多、分配的对象太大...
+查找办法：分析两次minor GC之间到底哪些地方分配了内存；
+利用jstat观察Survivor的消耗状况，-XX:PrintHeapAtGC，输出GC前后的详细信息；
+对于系统响应慢可以采用系统优化，不是GC优化的内容；
+
+（2）老生代的内存占用一直偏高
+调优方法：① 扩大老生代的大小（减少新生代的大小或调大heap的 大小）；
+减少new注意对minor gc的影响并且同时有可能造成full gc还是严重；
+调大heap注意full gc的时间的延长，cpu够强悍嘛，os是32 bit的吗？
+② 程序优化（去掉一些不必要的缓存）
+
+（3）Minor GC后总是有对象不断的进入老生代
+前提：这些进入老生代的对象在full GC时大部分都会被回收
+调优方法：
+① 降低Minor GC的执行频率；
+② 让对象尽量在Minor GC中就被回收掉：增大Eden区、增大survivor、增大TenuringThreshold；注意这些可能会造成minor gc执行频繁；
+③ 切换成CMS GC：老生代还没有满就回收掉，从而降低Full GC触发的可能性；
+④ 程序优化：提升响应速度、降低每次请求分配的内存、
+
+（4）降低单次Full GC的执行时间
+通常原因：老生代太大了...
+调优方法：1）是并行GC吗？   2）升级CPU  3）减小Heap或老生代
+
+（5）降低Minor GC执行频率
+通常原因：每次请求分配的内存多、请求量大
+通常办法：1）扩大heap、扩大新生代、扩大eden。注意点：降低每次请求分配的内存；横向增加机器的数量分担请求的数量。
+
+（6）降低Minor GC执行时间
+通常原因：新生代太大了，响应速度太慢了，导致每次Minor GC时存活的对象多
+通常办法：1）减小点新生代吧；2）增加CPU的数量、升级CPU的配置；加快系统的响应速度
+
+细微调整：
+
+首先需要了解以下情况：
+
+① 当响应速度下降到多少或请求量上涨到多少时，系统会宕掉？
+
+② 参数调整后系统多久会执行一次Minor GC，多久会执行一次Full GC，高峰期会如何？
+
+需要计算的量：
+
+①每次请求平均需要分配多少内存？系统的平均响应时间是多少呢？请求量是多少、多常时间执行一次Minor GC、Full GC？
+
+②现有参数下，应该是多久一次Minor GC、Full GC，对比真实状况，做一定的调整；
+
+必杀技：提升响应速度、降低每次请求分配的内存？
+
+9、系统调优举例
+
+     现象：1、系统响应速度大概为100ms；2、当系统QPS增长到40时，机器每隔5秒就执行一次minor gc，每隔3分钟就执行一次full gc，并且很快就一直full GC了；4、每次Full gc后旧生代大概会消耗400M，有点多了。
+
+     解决方案：解决Full GC次数过多的问题
+
+    （1）降低响应时间或请求次数，这个需要重构，比较麻烦；——这个是终极方法，往往能够顺利的解决问题，因为大部分的问题均是由程序自身造成的。
+
+    （2）减少老生代内存的消耗，比较靠谱；——可以通过分析Dump文件（jmap dump），并利用MAT查找内存消耗的原因，从而发现程序中造成老生代内存消耗的原因。
+
+    （3）减少每次请求的内存的消耗，貌似比较靠谱；——这个是海市蜃楼，没有太好的办法。
+
+    （4）降低GC造成的应用暂停的时间——可以采用CMS GS垃圾回收器。参数设置如下：
+
+     -Xms1536m -Xmx1536m -Xmn700m -XX:SurvivorRatio=7 -XX:+UseConcMarkSweepGC -XX:+UseCMSCompactAtFullCollection
+
+     -XX:CMSMaxAbortablePrecleanTime=1000 -XX:+CMSClassUnloadingEnabled -XX:+UseCMSInitiatingOccupancyOnly -XX:+DisableExplicitGC
+
+    （5）减少每次minor gc晋升到old的对象。可选方法：1） 调大新生代。2）调大Survivor。3）调大TenuringThreshold。
+
+      调大Survivor：当前采用PS GC，Survivor space会被动态调整。由于调整幅度很小，导致了经常有对象直接转移到了老生代；于是禁止Survivor区的动态调整了，-XX:-UseAdaptiveSizePolicy，并计算Survivor Space需要的大小，于是继续观察，并做微调…。最终将Full GC推迟到2小时1次。
+
+10、垃圾回收的实现原理
+
+      内存回收的实现方法：1）引用计数：不适合复杂对象的引用关系，尤其是循环依赖的场景。2）有向图Tracing：适合于复杂对象的引用关系场景，Hotspot采用这种。常用算法：Copying、Mark-Sweep、Mark-Compact。
+
+      Hotspot从root set开始扫描有引用的对象并对Reference类型的对象进行特殊处理。
+      以下是Root Set的列表：1）当前正在执行的线程；2）全局/静态变量；3）JVM Handles；4）JNI 【 Java Native Interface 】Handles；
+
+      另外：minor GC只扫描新生代，当老生代的对象引用了新生代的对象时，会采用如下的处理方式：在给对象赋引用时，会经过一个write barrier的过程，以便检查是否有老生代引用新生代对象的情况，如有则记录到remember set中。并在minor gc时，remember set指向的新生代对象也作为root set。
+
+     新生代串行GC(Serial Copying)：
+
+     新生代串行GC(Serial Copying)完整内存的分配策略：
+
+     1）首先在TLAB（本地线程分配缓冲区）上尝试分配；
+     2）检查是否需要在新生代上分配，如需要分配的大小小于PretenureSizeThreshold，则在eden区上进行分配，分配成功则返回；分配失败则继续；
+     3）检查是否需要尝试在老生代上分配，如需要，则遍历所有代并检查是否可在该代上分配，如可以则进行分配；如不需要在老生代上尝试分配，则继续；
+     4）根据策略决定执行新生代GC或Full GC，执行full gc时不清除soft Ref；
+     5）如需要分配的大小大于PretenureSizeThreshold，尝试在老生代上分配，否则尝试在新生代上分配；
+     6）尝试扩大堆并分配；
+     7）执行full gc，并清除所有soft Ref，按步骤5继续尝试分配。  
+
+     新生代串行GC(Serial Copying)完整内存回收策略
+     1）检查to是否为空，不为空返回false；
+     2）检查老生代剩余空间是否大于当前eden+from已用的大小，如大于则返回true，如小于且HandlePromotionFailure为true，则检查剩余空间是否大于之前每次minor gc晋级到老生代的平均大小，如大于返回true，如小于返回false。
+     3）如上面的结果为false，则执行full gc；如上面的结果为true，执行下面的步骤；
+     4）扫描引用关系，将活的对象copy到to space，如对象在minor gc中的存活次数超过tenuring_threshold或分配失败，则往老生代复制，如仍然复制失败，则取决于HandlePromotionFailure，如不需要处理，直接抛出OOM，并退出vm，如需处理，则保持这些新生代对象不动；
+
+    新生代可用GC-PS
+
+    完整内存分配策略
+    1）先在TLAB上分配，分配失败则直接在eden上分配；
+    2）当eden上分配失败时，检查需要分配的大小是否 >= eden space的一半，如是，则直接在老生代分配；
+    3）如分配仍然失败，且gc已超过频率，则抛出OOM；
+    4）进入基本分配策略失败的模式；
+    5）执行PS GC，在eden上分配；
+    6）执行非最大压缩的full gc，在eden上分配；
+    7）在旧生代上分配；
+    8）执行最大压缩full gc，在eden上分配；
+    9）在旧生代上分配；
+    10）如还失败，回到2。
+
+   最悲惨的情况，分配触发多次PS GC和多次Full GC，直到OOM。
+
+   完整内存回收策略
+   1）如gc所执行的时间超过，直接结束；
+   2）先调用invoke_nopolicy
+       2.1 先检查是不是要尝试scavenge；
+       2.1.1 to space必须为空，如不为空，则返回false；
+       2.1.2 获取之前所有minor gc晋级到old的平均大小，并对比目前eden+from已使用的大小，取更小的一个值，如老生代剩余空间小于此值，则返回false，如大于则返回true；
+       2.2 如不需要尝试scavenge，则返回false，否则继续；
+       2.3 多线程扫描活的对象，并基亍copying算法回收，回收时相应的晋升对象到旧生代；
+       2.4 如UseAdaptiveSizePolicy，那么重新计算to space和tenuringThreshold的值，并调整。
+   3）如invoke_nopolicy返回的是false，或之前所有minor gc晋级到老生代的平均大小 > 旧生代的剩余空间，那么继续下面的步骤，否则结束；
+   4）如UseParallelOldGC，则执行PSParallelCompact，如不是UseParallelOldGC，则执行PSMarkSweep。
+
+    老生代并行CMS GC：
+
+    优缺点：
+
+    1） 大部分时候和应用并发进行，因此只会造成很短的暂停时间；
+    2）浮动垃圾，没办法，所以内存空间要稍微大一点；
+    3）内存碎片，-XX:+UseCMSCompactAtFullCollection 来解决；
+    4） 争抢CPU，这GC方式就这样；
+    5）多次remark，所以总的gc时间会比并行的长；
+    6）内存分配，free list方式，so性能稍差，对minor GC会有一点影响；
+    7）和应用并发，有可能分配和回收同时，产生竞争，引入了锁，JVM分配优先。
+
+11、TLAB的解释
+
+     堆内的对象数据是各个线程所共享的，所以当在堆内创建新的对象时，就需要进行锁操作。锁操作是比较耗时，因此JVM为每个线在堆上分配了一块“自留地”——TLAB(全称是Thread Local Allocation Buffer)，位于堆内存的新生代，也就是Eden区。每个线程在创建新的对象时，会首先尝试在自己的TLAB里进行分配，如果成功就返回，失败了再到共享的Eden区里去申请空间。在线程自己的TLAB区域创建对象失败一般有两个原因：一是对象太大，二是自己的TLAB区剩余空间不够。通常默认的TLAB区域大小是Eden区域的1%，当然也可以手工进行调整，对应的JVM参数是-XX:TLABWasteTargetPercent。
+
+数据库调优可以使数据库应用运行得更快，它需要综合考虑各种复杂的因素。将数据均 匀分布在磁盘上可以提高I/O 利用率，提高数据的读写性能；适当程度的非规范化可以改善 系统查询性能；建立索引和编写高效的SQL 语句能有效避免低性能操作；通过锁的调优解 决并发控制方面的性能问题。     数据库调优技术可以在不同的数据库系统中使用,它不必纠缠于复杂的公式和规则，然 而它需要对程序的应用、数据库管理系统、查询处理、并发控制、操作系统以及硬件有广泛 而深刻的理解。
+
+ 2．计算机硬件调优
+
+2.1 数据库对象的放置策略     利用数据库分区技术，均匀地把数据分布在系统的磁盘中，平衡I/O 访问，避免I/O 瓶 颈：    
+    （1）访问分散到不同的磁盘，即使用户数据尽可能跨越多个设备，多个I/O 运转，避免 I/O 竞争，克服访问瓶颈；分别放置随机访问和连续访问数据。    
+    （2）分离系统数据库I/O 和应用数据库I/O，把系统审计表和临时库表放在不忙的磁盘 上。    
+    （3）把事务日志放在单独的磁盘上，减少磁盘I/O 开销，这还有利于在障碍后恢复，提 高了系统的安全性。    
+    （4）把频繁访问的“活性”表放在不同的磁盘上；把频繁用的表、频繁做Join的表分别 放在单独的磁盘上，甚至把频繁访问的表的字段放在不同的磁盘上，把访问分散到不同的磁 盘上，避免I/O 争夺。
+2.2 使用磁盘硬件优化数据库
+     RAID (独立磁盘冗余阵列)是由多个磁盘驱动器(一个阵列)组成的磁盘系统。通过将磁盘阵列当作一个磁盘来对待，基于硬件的RAID允许用户管理多个磁盘。使用基于硬件的 RAID与基于操作系统的RAID相比较，基于硬件的RAID能够提供更佳的性能。如果使用基于操作系统的RAID，那么它将占据其他系统需求的CPU周期；通过使用基于硬件的RAID， 用户在不关闭系统的情况下能够替换发生故障的驱动器。    
+SQL Server 一般使用RAID等级0、1  和5。   
+    RAID 0 是传统的磁盘镜象，阵列中每一个磁盘都有一个或多个磁盘拷贝，它主要用来 提供最高级的可靠性，使RAID 0成倍增加了写操作却可以并行处理多个读操作，从而提高 了读操作的性能。
+    RAID 1 是磁盘镜像或磁盘双工，能够为事务日志保证冗余性。
+    RAID 5带奇偶的磁盘条带化，即将数据信息和校验信息分散到阵列的所有磁盘中，它可以消除一个校验盘的瓶颈和单点失效问题，RAID 5 也会增加写操作，也可以并行处理一个读操作，还 可以成倍地提高读操作的性能。    
+    相比之下，RAID 5 增加的写操作比RAID 0 增加的要少许多。在实际应用中，用户的读操作要求远远多于写操作请求，而磁盘执行写操作的速度很快，以至于用户几乎感觉不到增加的时间，所以增加的写操作负担不会带来什么问题。在性能较好的服务器中一般都会选择使用RAID 5 的磁盘阵列卡来实现，对于性能相对差一些的服务器也可利用纯软件的方式来实现RAID 5。
+
+3．关系系统与应用程序调优
+    3.1 应用程序优化     从数据库设计者的角度来看，应用程序无非是实现对数据的增加、修改、删除、查询和体现数据的结构和关系。设计者在性能方面的考虑因素，总的出发点是：把数据库当作奢侈 的资源看待，在确保功能的同时，尽可能少地动用数据库资源。包括如下原则：    
+（    1）不访问或少访问数据库；    
+    （2）简化对数据库的访问；    
+    （3）使访问最优；    
+    （4 ）对前期及后续的开发、部署、调整提出要求，以协助实现性能目标。   
+     另外，不要直接执行完整的SQL  语法，尽量通过存储过程来调用SQL Server。客户与服务器连接时，建立连接池，让连接尽量得以重用，以避免时间与资源的损耗。非到不得已， 不要使用游标结构，确实使用时，注意各种游标的特性。
+
+3.2  基本表设计优化
+     在基于表驱动的信息管理系统中，基本表的设计规范是第三范式。第三范式的基本特征 是非主键属性只依赖于主键属性。基于第三范式的数据库表设计具有很多优点：一是能消除 冗余数据、节省磁盘存储空间；二是有良好的数据完整性限制（基于主外键的参照完整限制 和基于主键的实体完整性限制），这使得数据容易维护、移植和更新；三是数据的可逆性好， 在做连接查询或者合并表时不遗漏、不重复；四是消除了冗余数据（这里主要指冗余列）， 使得查询时每个数据页存储的数据行增多，这样就有效地减少了逻辑I/O，同时也减少了物 理I/O；五是对大多数事务而言，运行性能好；六是物理设计的机动性较大，能满足日益增 长的用户需求。
+    基于第三范式设计的库表虽然有其优越性，然而在实际应用中有时不利于系统运行性能 的优化：例如需要部分数据时而要扫描整表，许多过程同时竞争同一数据，反复用相同行计 算相同的结果，过程从多表获取数据时引发大量的连接操作，当数据来源于多表时的连接操 作；这都消耗了磁盘I/O 和CPU 时间。特别需要提出的是，在遇到下述情形时，我们要对 基本表进行扩展设计优化：许多过程要频繁访问一个表、子集数据访问、重复计算和冗余数 据，有时用户要求一些过程优先或低的响应时间，为避免以上不利因素，我们通常根据访问 的频繁程度对相关表进行分割处理、存储冗余数据、存储衍生列、合并相关表处理，这些都 是克服这些不利因素和优化系统运行的有效途径。 
+    （1）分割表     分割表可分为水平分割表和垂直分割表两种：水平分割是按照行将一个表分割为多个 表，这可以提高每个表的查询速度，但是由于造成了多表连接，所以应该在同时查询或更新 不同分割表中的列的情况比较少的情况下使用。垂直分割是对于一个列很多的表，若某些列 的访问频率远远高于其它列，在不破坏第三范式的前提下将主键和这些列作为一个表，将主 键和其它列作为另外一个表。一种是当多个过程频繁访问表的不同列时，可将表垂直分成几 个表，减少磁盘I/O。通过减少列的宽度，增加了每个数据页的行数，一次I/O 就可以扫描 更多的行，从而提高了访问每一个表的速度。垂直分割表可以达到最大化利用Cache 的目的。 分割表的缺点是要在插入或删除数据时要考虑数据的完整性，用存储过程维护。 
+    （2）存储衍生数据     对一些要做大量重复性计算的过程而言，若重复计算过程得到的结果相同，或计算牵扯 多行数据需额外的磁盘I/O 开销，或计算复杂需要大量的C P U 时间，就考虑存储计算结果：若在一行或多行进行重复性计算，就在表内增加列存储结果，但若参与计算的列被更新时， 必须要用触发器或存储过程更新这个新列。总之，存储冗余数据有利于加快访问速度，但违 反了第三范式，这会增加维护数据完整性的代价，必须用触发器立即更新、或存储过程更新， 以维护数据的完整性。
+
+3.3 修改应用技术模式
+     引入“中间表”的概念，在实际单据未进入核心业务流程前，采用“中间表”的技术思 路，就是在实际用户操作过程中，实际操作的是一个临时表，在进行数据某个阶段审核（进 入下一个环节）后，将临时表的数据写入正式表，并且删除临时表的数据，这样始终保持用 户操作表的固定的数据量而且控制增长，可以定期清除。     采用临时表技术首先需将要操作的数据集插入到临时表中，这会给系统带来额外的开 销。这里假设临时表中的数据集远小于源数据表中的数据集，因此在进行数据连接操作或对 数据集进行频繁读操作时，系统的性能会提高几倍甚至几十倍不等。    
+    并非所有情况都适宜用临时表技术。一般来说，下面两种情况适宜采用临时表技术进行 处理：     
+    （1）对数据量较大的表进行连接操作，并且连接操作的结果是一个小结果集。 
+    （2）对数据量较大的表进行频繁访问，访问的范围比较固定且比较集中。 
+    合理使用临时表技术，有助于提高应用系统对大数据表的实时处理的性能。
+4．数据库索引优化    
+    索引是建立在表上的一种数据组织，它能提高访问表中一条或多条记录的特定查询效 率。利用索引优化系统性能是显而易见的，对所有常用于查询中的Where  子句的列和所有 用于排序的列创建索引，可以避免整表扫描或访问，在不改变表的物理结构的情况下，直接 访问特定的数据列，这样可以减少数据存取时间；利用索引可以优化或排除耗时的分类操作， 把数据分散到不同的页面上，这样就分散了插入的数据；主键自动建立了唯一索引，因此唯 一索引也能确保数据的唯一性（即实体完整性）。总之，索引可以加快查询速度、减少I/O 操作、消除磁盘排序。     优化索引可以避免扫描整个表，减少因查询造成的开销。一般说来建立索引要注意以下 几点：     
+    （1）检查被索引的列或组合索引的首列是否出现在PL/SQL 语句的WHERE 子句中， 这是“执行计划”能用到相关索引的必要条件。比较一下列中唯一键的数量和表中记录的行 数，就可以判断该列的可选择性。如果该列的“唯一键的数量/表中记录行数”的比值越接近 于1，则该列的可选择行越高。在可选择性高的列上进行查询，返回的数据就较少，比较适 合索引查询。相反，比如性别列上只有两个值，可选择行就很小，不适合索引查询。因此， 在查询中经常作为条件表达式且不同值较多的列上建立索引，不同值较少的列上不要建立索 引。     
+    （2）索引的创建也是需要代价的，对于删除、某些更新、插入操作，对于每个索引都 要进行相应的删除、更新、插入操作。从而导致删除、某些更新、插入操作的效率变低。因 此频繁进行删除、插入操作的表不要建立过多的索引。     
+    （3）查询经常用到的列上建立非聚簇索引，在频繁进行范围查询、排序、分组的列上 建立聚簇索引。     
+    （4 ）对于不存在重复值的列，创建唯一索引优于创建非唯一索引。     
+    （5）当数据库表更新大数据后，删除并重新建立索引来提高查询速度。     
+    （6）当对一个表的update 操作远远多于select 操作时，不应创建索引。     
+    （7）如果索引列是函数的参数，则索引在查询时用不上，该列也不适合索引。     
+    （8）Hash   Join （HJ ）由于须做HASH 运算，索引的存在对数据查询速度几乎没有影 响。     
+    （9）在主键上建立索引，尤其当经常用它作为连接的时候；在经常用于连接而又未指 定为外键的列上建立索引。    
+     (10)经常同时存取多列，且每列都含有重复值，可以考虑建立复合索引来覆盖一个或 一组查询，并且把查询引用最频繁的列作为前导列。                                     
+    （11）尽使用较窄的索引，这样数据页每页上能因存放较多的索引行而减少操作。     
+    （12）并行查询将不会用到索引。     
+    （13）索引中存储值不能为全空。     
+    （14）查询中较少用到的列、数据量较大的列均不应建立索引。
+
+5．SQL 语句优化    
+    在完成了系统设计、索引设计等工作以后，就要考虑在使用过程中对语句的设计了。 影响数据库应用程序性能的一个重要因素是SQL 语句，按其影响严重程度，依次可分为： 无谓的SQL，拙劣的SQL，复杂的SQL。     无谓的SQL：它们对数据库的访问，并不存在技术、技能上的问题，但却不是必要的， 超出了实际业务需求。其结果是浪费了宝贵的主机资源、占用了网络流量，降低了系统性能。     拙劣的SQL：它们对数据库的访问并不是多余的，所体现的业务逻辑或结果是正确的， 但是“写法”不够好，导致数据库处理起来不够优化。     复杂的SQL：数据库中多表（或视图）关联，条件复杂、冗长，计算复杂，使用冷僻 的SQL 技术等。     其中，无谓的SQL 和拙劣的SQL 属于开发技能方面的问题；复杂的SQL 属于设计技 能方面的问题，设计到数据库的结构。     在使用结构化查询语言来执行查询时，推荐以下举措：    
+    （1）择运算应尽可能先做，并在对同一个表进行多个选择运算时，选择影响较大的语 句放在前面；较弱的选择条件写在后面，这样就可以先根据较严格的条件得出数据较小的 信息，再在这些信息中根据后面较弱的条件得到满足条件的信息。    
+    （2）应避免使用相关子查询。把子查询转换成联结来实现。对于主查询的每一条记录子 查询都要执行一次，嵌套的层次越多效率越低。避免对子句使用数学运算符。即不要对数 据表的属性列进行操作。SQL 概念上将位于WHERE  子句中的相关子查询，处理成获取参 数并且返回一个单独的值或值的集合的函数。因为子查询要对应位于外层查询的每一个元组 进行单独的计算。从而导致大量的随机磁盘I/O 操作。所以在实际应用中若可以用连接代替 的子查询，则用连接实现。例如，有以下相关子查询语句：    
+SELECT ProductName FROM Products WHERE EXISTS     (SELECT * FROM OrderDetails     WHERE     Discount >= 25 AND  Products.ProductID= OrderDetails.ProjectID) ；    
+用连接查询实现如下：    
+SELECT   ProductName   FROM    Products ， OrderDetails     WHERE Discount >= 25 AND Products.ProductID= OrderDetails.ProjectID    
+    （3）字段提取按照“ 需多少，提多少” 的原则，避免“SELECT *”。“SELECT *”需 要数据库返回相应表的所有列信息，这对于一个列较多的表无疑是一项费时的操作。    
+    (4)避免使用!=(或<>)、IS NULL 或IS NOT NULL、IN、NOT IN等这样的操作符，避免在WHERE 子句中使用非聚合表达式。这些操作符会使系统无法使用索引，而只能直接搜 索表中的数据。例如，SELECT id，name FROM employee WHERE id!=B%      优化器将无法通过索引来确定将要命中的行数，因此需要搜索该表的所有行。    
+    (5)避免使用OR，用UNION 代替。OR 语句的执行原理并不是利用列上的索引根据每 个语句分别查找再将结果求并集，而是先取出满足每个OR 子句的行，存入临时数据库的 工作表中，再建立唯一索引以去掉重复行，最后从这个临时表中计算结果。这样使用可能 造成索引失效，导致顺序扫描整个表，大大降低查询效率。    
+    （6）在执行连接前对关系作适当的预处理，预处理的方法有两种，在连接属性上建立 索引和对关系进行排序。    
+    （7）将一个大的查询拆成多步执行查询。    
+    （8）如果应用程序使用循环,可考虑在查询内放入循环。
+6．事务处理调优    
+    数据库的日常运行过程中可能面临多个用户同时对数据库的并发操作带来的数据不一 致的问题，如：丢失更新、脏读和不可重复读等。并发控制的主要方法是封锁，锁就是在一段时间内禁止用户做某些操作以避免产生数据不一致。    
+    数据库应用程序将其工作分成若干个事务进行处理。当一个事务执行时，它访问数据库 并执行一些本地计算。开发人员可以假设每一个事务都会被隔离地执行—没有任何并发动 作。因为隔离的概念提供了透明性，这种对事务处理方式的保证有时被称为原子性保证。但 是，如果把应用程序中的事务序列作为一个整体来看，则并没有上面所说的那种保证。在一 个应用程序执行的两个事务之间，可能会执行另外一个应用程序的事务，而且第二个应用程 序的执行可能修改了第一个应用程序中的两个事务（或其中的一个）需要访问的数据项。因 此，事务的长度对保证正确性有着重要影响。    
+    尽管将事务切分成较小粒度可以提高执行效率，但会因此破坏执行的正确性。这种性能 和正确性之间的矛盾充斥并发控制的整个调优过程。考虑事务的性能我们要考虑到：事务使 用的锁的个数（在所有其他条件相同的情况下，使用的锁个数越少，性能越好）；锁的类型  （读锁对性能更有利）；事务持有锁的时间长短（持有时间越短，性能越好）。
+    关于锁的调优 有以下建议：
+   （1）使用特殊的系统程序来处理长的读操作。对于一个只读的事务R 来说，它“看到” 的数据库的状态一直是事务R  开始时的状态。只读查询可以不需要封锁开销，在不造成阻 塞和死锁的情况下，只读的查询可以与其他对同一数据进行更新的较小的事务并行地执行。
+   （2）消除不必要的封锁。只有一个事务执行时，或所有事务都是只读事务时，用户应 利用配置选项减少锁的个数，从而减小锁管理模块的内存开销和执行封锁操作的处理时间开 销。
+   （3）根据事务的内容将事务切分成较小的事务。事务所要求的锁越多，它需要等待其 他事务释放某个锁的可能就越大。事务T 执行的时间越长，被T  阻塞的事务等待的时间可 能就越长。因此，在可能发生阻塞的情况下，利用较短的事务较好。     
+    （4 ）在应用程序允许的情况下，适当降低隔离级别。     
+    （5）选择适当的封锁粒度。页级封锁阻止并发事务访问或修改该页面上所有记录，表 级封锁阻止并发事务访问或修改表内所有的页面；记录级封锁（行级锁）比页级封锁粒度好， 页级封锁比表级封锁粒度好。长事务（指要访问表内几乎所有页面的事务）应该尽可能使用 表级封锁来防止死锁，而短事务应该使用记录级封锁来提高并发度。     
+    （6）只在数据库很少被访问时才修改有关数据定义的数据（系统目录或元数据）。每个 能够编译、添加或删除表、添加或删除索引、改变属性定义的事务都必须访问目录数据，因 此，目录很容易成为热点，也因而成为瓶颈。     
+    （7）减少访问热点（大量事务访问和更新的数据）。只有在更新某热点的事务完成滞后， 其他的事务才能获得这个热点上的锁，因此热点可能成为瓶颈。     
+    （8）死锁检测周期的调优。    
+     以上每个建议都可以独立于其他建议来运用，但是在调优时必须检测是否能体现合适 的隔离性保证。
+
+7．总结    
+    数据库性能优化的基本原则就是通过尽可能少的磁盘访问获得所需要的数据。本文从计 算机硬件、关系系统与应用程序、数据库索引、SQL  语句、事务处理几个比较共性的方面 分析了数据库性能优化的问题,  提出了若干数据库性能优化的策略。当然实现优化的方法还 有很多,  要根据具体情况而定。对于不同的应用情况,我们应该具体情况具体分析,  各方面优 化措施综合运用,  以使数据库性能得到提高。数据库应用系统的性能是一项全民工程，开发 团队的所有人都有责任为性能做贡献，树立性能意识，使之成为日常工作的习惯而不是单独 成为某一阶段的工作，要未雨绸缪，不要寄希望于某一个环节的工作。
+
+所有的异常都有一个共同的祖先 Throwable（可抛出）,有两个重要的子类：Exception（异常）和 Error（错误），异常是程序本身可以处理的，而错误是无法处理的。
+Error（错误）:是程序无法处理的错误，在虚拟机自身出问题、或者试图执行时环境出现严重问题，如OutOfMemoryError、NoClassDefFoundError。异常发生时，Java虚拟机（JVM）一般会选择线程终止。
+Exception（异常）:是程序本身可以处理的异常。有一个重要的子类 RuntimeException，RuntimeException 类及其子类表示“JVM 常用操作”引发的错误；
+Java的异常(包括Exception和Error)分为可查的异常（checked exceptions）和不可查的异常（unchecked exceptions）。 
+ 可查异常（编译器要求必须处理的异常）：正确的程序在运行中，很容易出现的、情理可容的异常。虽是异常，但在一定程度上可以预计，因此要求进行异常处理try/catch/throw(不处理编译无法通过)。除了RuntimeException及其子类以外，其他的Exception类及其子类都属于此类异常.
+ 不可查异常(编译器不要求强制处理的异常):包括运行时异常（RuntimeException与其子类）和错误（Error），如NullPointerException、IndexOutOfBoundsException等，程序中可以处理它们，也可以不处理。
